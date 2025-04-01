@@ -1,0 +1,93 @@
+---
+title: "Misc"
+output: html_document
+date: "`r Sys.Date()`"
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(palmerpenguins)
+library(easystats)
+library(equatiomatic)
+library(pander)
+library(broom)
+library(kableExtra)
+#install.packages("kableExtra")
+#install.packages("pander")
+#install.packages("equatiomatic")
+ 
+theme_set(theme_minimal())
+ 
+##command option i short hand for R code##
+##look at markdownlivepreview.com to get some help with coding in R markdown
+#rmdformats look this up to get templates of websites
+ 
+ 
+```
+ 
+#Hey look its penguins
+ 
+```{r fig.height=2, fig.width=1, fig.align='center'}
+
+```
+ 
+##Here's a look at the palmer penguins data set:
+ 
+```{r}
+penguins %>% glimpse
+```
+The steps of data science are:
+ 
+1. Import
+2. Clean 
+3. Visualize 
+4. Model 
+5. Report
+ 
+We don't need to do any real cleaning for this data set. But we can show some pretty 
+pictures...
+ 
+```{r}
+p<-
+penguins %>%
+  filter(!is.na(sex)) %>%
+  ggplot(aes(x = species, 
+             y = body_mass_g, 
+             colour = sex)) + 
+  geom_boxplot() + 
+  geom_jitter(color='black', alpha=.25, width = .2) + 
+  labs(x = "Species", 
+       y = "body mass(g)", 
+       color = "Sex")
+ 
+plotly::ggplotly(p)
+ 
+```
+ 
+Here, we see that male and female penguins have distinct body mass distributions for each 
+species of penguin. Don't believe your eyes?
+ 
+Here are some stats:
+ 
+```{r}
+mod1 <- 
+penguins %>%
+  filter(!is.na(sex)) %>%
+  glm(data=.,
+      formula = body_mass_g ~ sex * species)
+ 
+```
+ 
+ 
+```{r}
+mod1 %>% tidy %>% 
+  kable %>%
+  kable_classic(lightable_options = "hover")
+```
+ 
+The equation for our model is:
+ 
+```{r}
+equatiomatic::extract_eq(mod1)
+```
