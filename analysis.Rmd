@@ -1,0 +1,57 @@
+---
+title: "Analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(leaflet)
+
+data <- read.csv("cleaned_influenza_data.csv")
+```
+
+## Total Influenza Cases Over Time
+
+```{r}
+data %>%
+  group_by(Year) %>%
+  summarize(Total_A = sum(Total_A, na.rm = TRUE),
+            Total_B = sum(Total_B, na.rm = TRUE)) %>%
+  pivot_longer(cols = c(Total_A, Total_B), names_to = "Type", values_to = "Count") %>%
+  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = 'scatter', mode = 'lines+markers')
+```
+
+## ILI Trends Over Time
+
+```{r}
+data %>%
+  group_by(Year) %>%
+  summarize(Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)) %>%
+  plot_ly(x = ~Year, y = ~Avg_ILI, type = 'bar', name = 'Avg Weighted ILI')
+```
+
+## U.S. Flu Cases Map
+
+```{r}
+# Dummy coordinates for U.S. center
+us_lat <- 39.8283
+us_lng <- -98.5795
+
+# Summarize total cases by year
+map_data <- data %>%
+  group_by(Year) %>%
+  summarize(Total_Cases = sum(Total_A, na.rm = TRUE) + sum(Total_B, na.rm = TRUE))
+
+# Create leaflet map
+leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = rep(us_lng, nrow(map_data)),
+    lat = rep(us_lat, nrow(map_data)),
+    radius = ~map_data$Total_Cases / 50000,
+    label = ~paste("Year:", map_data$Year, "<br>Total Cases:", map_data$Total_Cases),
+    color = "red",
+    fillOpacity = 0.7
+  )
+```

@@ -1,0 +1,12 @@
+name: "influenza-tracker"
+output_dir: "docs"
+navbar:
+  title: "Influenza Tracker"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Analysis"
+      href: analysis.html
+    - text: "Data Table"
+      href: data.html
+output: html_document

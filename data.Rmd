@@ -1,0 +1,10 @@
+---
+title: "Data Table"
+output: html_document
+---
+
+```{r}
+library(DT)
+data <- read.csv("cleaned_influenza_data.csv")
+datatable(data, options = list(pageLength = 10))
+```
