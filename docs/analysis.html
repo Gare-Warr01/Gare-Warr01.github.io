@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Analysis</title>
+
+<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.2.2/leaflet.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Influenza Tracker</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="analysis.html">Analysis</a>
+</li>
+<li>
+  <a href="data.html">Data Table</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Analysis</h1>
+
+</div>
+
+
+<div id="total-influenza-cases-over-time" class="section level2">
+<h2>Total Influenza Cases Over Time</h2>
+<pre class="r"><code>data %&gt;%
+  group_by(Year) %&gt;%
+  summarize(Total_A = sum(Total_A, na.rm = TRUE),
+            Total_B = sum(Total_B, na.rm = TRUE)) %&gt;%
+  pivot_longer(cols = c(Total_A, Total_B), names_to = &quot;Type&quot;, values_to = &quot;Count&quot;) %&gt;%
+  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = &#39;scatter&#39;, mode = &#39;lines+markers&#39;)</code></pre>
+<pre><code>## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels
+## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-1910859e02b74fad1764" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-1910859e02b74fad1764">{"x":{"visdat":{"41dc420fd69f":["function () ","plotlyVisDat"]},"cur_data":"41dc420fd69f","attrs":{"41dc420fd69f":{"x":{},"y":{},"mode":"lines+markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1830,56710,117405,147794,166191,117763,29469,424433,124683,217319,350577],"mode":"lines+markers","type":"scatter","name":"Total_A","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[419,4508,2753,3822,557,5880,5040,4880,12284,11205,3587,11440,10609,18391,11228,20028,24566,45625,72590,48951,78854,1517,3827,30887,88821,29567],"mode":"lines+markers","type":"scatter","name":"Total_B","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="ili-trends-over-time" class="section level2">
+<h2>ILI Trends Over Time</h2>
+<pre class="r"><code>data %&gt;%
+  group_by(Year) %&gt;%
+  summarize(Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)) %&gt;%
+  plot_ly(x = ~Year, y = ~Avg_ILI, type = &#39;bar&#39;, name = &#39;Avg Weighted ILI&#39;)</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-5bae547b25bae7e4bc74" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-5bae547b25bae7e4bc74">{"x":{"visdat":{"41dc61336d98":["function () ","plotlyVisDat"]},"cur_data":"41dc61336d98","attrs":{"41dc61336d98":{"x":{},"y":{},"name":"Avg Weighted ILI","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg_ILI"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"name":"Avg Weighted ILI","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="u.s.-flu-cases-map" class="section level2">
+<h2>U.S. Flu Cases Map</h2>
+<pre class="r"><code>library(leaflet)
+library(dplyr)
+
+# Dummy coordinates (U.S. center)
+us_lat &lt;- 39.8283
+us_lng &lt;- -98.5795
+
+# Summarize total cases by year
+map_data &lt;- data %&gt;%
+  group_by(Year) %&gt;%
+  summarize(Total_Cases = sum(Total_A, na.rm = TRUE) + sum(Total_B, na.rm = TRUE)) %&gt;%
+  mutate(lat = us_lat, lng = us_lng)
+
+# Create leaflet map
+leaflet(data = map_data) %&gt;%
+  addTiles() %&gt;%
+  addCircleMarkers(
+    ~lng, ~lat,
+    radius = ~Total_Cases / 50000,
+    label = ~paste(&quot;Year:&quot;, Year, &quot;&lt;br&gt;Total Cases:&quot;, Total_Cases),
+    color = &quot;red&quot;,
+    fillOpacity = 0.7
+  )</code></pre>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-f7c0ec1c9b8218341978" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-f7c0ec1c9b8218341978">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addCircleMarkers","args":[[39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283,39.8283],[-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795,-98.5795],[0.00838,0.09016,0.05506,0.07643999999999999,0.01114,0.1176,0.1008,0.09760000000000001,0.24568,0.2241,0.07174,0.2288,0.21218,0.36782,0.22456,0.43716,1.62552,3.2606,4.40768,4.30284,3.93234,0.61972,8.565200000000001,3.1114,6.1228,7.60288],null,null,{"interactive":true,"className":"","stroke":true,"color":"red","weight":5,"opacity":0.5,"fill":true,"fillColor":"red","fillOpacity":0.7},null,null,null,null,["Year: 2000 &lt;br&gt;Total Cases: 419","Year: 2001 &lt;br&gt;Total Cases: 4508","Year: 2002 &lt;br&gt;Total Cases: 2753","Year: 2003 &lt;br&gt;Total Cases: 3822","Year: 2004 &lt;br&gt;Total Cases: 557","Year: 2005 &lt;br&gt;Total Cases: 5880","Year: 2006 &lt;br&gt;Total Cases: 5040","Year: 2007 &lt;br&gt;Total Cases: 4880","Year: 2008 &lt;br&gt;Total Cases: 12284","Year: 2009 &lt;br&gt;Total Cases: 11205","Year: 2010 &lt;br&gt;Total Cases: 3587","Year: 2011 &lt;br&gt;Total Cases: 11440","Year: 2012 &lt;br&gt;Total Cases: 10609","Year: 2013 &lt;br&gt;Total Cases: 18391","Year: 2014 &lt;br&gt;Total Cases: 11228","Year: 2015 &lt;br&gt;Total Cases: 21858","Year: 2016 &lt;br&gt;Total Cases: 81276","Year: 2017 &lt;br&gt;Total Cases: 163030","Year: 2018 &lt;br&gt;Total Cases: 220384","Year: 2019 &lt;br&gt;Total Cases: 215142","Year: 2020 &lt;br&gt;Total Cases: 196617","Year: 2021 &lt;br&gt;Total Cases: 30986","Year: 2022 &lt;br&gt;Total Cases: 428260","Year: 2023 &lt;br&gt;Total Cases: 155570","Year: 2024 &lt;br&gt;Total Cases: 306140","Year: 2025 &lt;br&gt;Total Cases: 380144"],{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[39.8283,39.8283],"lng":[-98.5795,-98.5795]}},"evals":[],"jsHooks":[]}</script>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -34,24 +34,28 @@ data %>%
 ## U.S. Flu Cases Map
 
 ```{r}
-# Dummy coordinates for U.S. center
+library(leaflet)
+library(dplyr)
+
+# Dummy coordinates (U.S. center)
 us_lat <- 39.8283
 us_lng <- -98.5795
 
 # Summarize total cases by year
 map_data <- data %>%
   group_by(Year) %>%
-  summarize(Total_Cases = sum(Total_A, na.rm = TRUE) + sum(Total_B, na.rm = TRUE))
+  summarize(Total_Cases = sum(Total_A, na.rm = TRUE) + sum(Total_B, na.rm = TRUE)) %>%
+  mutate(lat = us_lat, lng = us_lng)
 
 # Create leaflet map
-leaflet() %>%
+leaflet(data = map_data) %>%
   addTiles() %>%
   addCircleMarkers(
-    lng = rep(us_lng, nrow(map_data)),
-    lat = rep(us_lat, nrow(map_data)),
-    radius = ~map_data$Total_Cases / 50000,
-    label = ~paste("Year:", map_data$Year, "<br>Total Cases:", map_data$Total_Cases),
+    ~lng, ~lat,
+    radius = ~Total_Cases / 50000,
+    label = ~paste("Year:", Year, "<br>Total Cases:", Total_Cases),
     color = "red",
     fillOpacity = 0.7
   )
+
 ```
