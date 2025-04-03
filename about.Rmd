@@ -1,0 +1,30 @@
+---
+title: "About Me"
+output: html_document
+---
+
+![Garrett Warr](images/profile.jpg){width="200px" style="border-radius: 50%;"}
+
+# About the Creator
+
+My name is **Garrett Warr**, a biotechnology student at **Utah Valley University** with a passion for data science, public health, and real-world problem solving.
+
+This website was created as my **final project** for my Data Science class, combining data analytics, public health data, and interactive web technologies to tell the story of influenza trends over the past 20 years.
+
+---
+
+## Academic Background
+- **Biotechnology Major** – Utah Valley University
+- Interests: Virology, Pathology, Data Analysis, Public Health Research
+
+---
+
+## Download My CV
+
+<a href="Garrett_Warr_CV_2025.docx" class="btn btn-primary" target="_blank">📄 Download My CV</a>
+
+---
+
+<footer style="font-size: 0.8em; margin-top: 30px;">
+Created by Garrett Warr | Data Science Final Project | Spring 2025
+</footer>

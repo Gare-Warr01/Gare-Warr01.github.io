@@ -1,12 +1,16 @@
 name: "influenza-tracker"
 output_dir: "docs"
 navbar:
-  title: "Influenza Tracker"
+  title: " U.S. Influenza Tracker"
   left:
-    - text: "Home"
+    - text: "Flu Trends Dashboard"
       href: index.html
-    - text: "Analysis"
+    - text: "Outbreak Insights"
       href: analysis.html
-    - text: "Data Table"
+    - text: "Raw Data Explorer"
       href: data.html
-output: html_document
+    - text: "About Me"
+      href: about.html
+output:
+  html_document:
+    theme: spacelab
