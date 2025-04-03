@@ -11,7 +11,7 @@
 
 
 
-<title>Insights &amp; Analysis</title>
+<title>Flu Forecasts &amp; Predictions</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -238,18 +238,24 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">U.S. Influenza Tracker</a>
+      <a class="navbar-brand" href="index.html">Flu Dashboard</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Flu Trends Dashboard</a>
+  <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="analysis.html">Outbreak Insights</a>
+  <a href="outbreak_insights.html">Outbreak Insights</a>
 </li>
 <li>
-  <a href="data.html">Raw Data Explorer</a>
+  <a href="heatmap.html">Interactive Heatmap</a>
+</li>
+<li>
+  <a href="flu_forecast.html">Flu Forecasts &amp; Predictions</a>
+</li>
+<li>
+  <a href="raw_data.html">Raw Data</a>
 </li>
 <li>
   <a href="about.html">About Me</a>
@@ -262,117 +268,43 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div id="header">
+<div id="section-header">
 
 
 
-<h1 class="title toc-ignore">Insights &amp; Analysis</h1>
+<h1 class="title toc-ignore">Flu Forecasts &amp; Predictions</h1>
 
 </div>
 
 
-<div id="final-project-analysis-insights" class="section level1">
-<h1>🔍 Final Project Analysis &amp; Insights</h1>
-<p>This section provides a deeper statistical and analytical look at
-U.S. influenza trends from 2000 to 2023, based on the CDC FluView
-dataset.</p>
-<hr />
-<div id="year-over-year-flu-cases" class="section level2">
-<h2>📈 Year-over-Year Flu Cases</h2>
-<pre class="r"><code>library(tidyverse)
-data &lt;- read.csv(&quot;cleaned_influenza_data.csv&quot;)
+<pre class="r"><code>ui &lt;- fluidPage(
+  selectInput(&quot;state&quot;, &quot;Select State:&quot;, choices = unique(flu_data$State)),
+  numericInput(&quot;years&quot;, &quot;Years Ahead to Forecast:&quot;, value = 2, min = 1, max = 5),
+  dygraphOutput(&quot;forecast_plot&quot;)
+)
 
-yearly_cases &lt;- data %&gt;%
-  group_by(Year) %&gt;%
-  summarize(Total_Cases = sum(Total_A, na.rm = TRUE) + sum(Total_B, na.rm = TRUE))
+server &lt;- function(input, output) {
+  output$forecast_plot &lt;- renderDygraph({
+    state_data &lt;- flu_data %&gt;%
+      filter(State == input$state) %&gt;%
+      group_by(Year) %&gt;%
+      summarize(y = sum(Total_Cases)) %&gt;%
+      mutate(ds = as.Date(paste0(Year, &quot;-01-01&quot;)))
+    m &lt;- prophet(state_data, yearly.seasonality = TRUE)
+    future &lt;- make_future_dataframe(m, periods = input$years, freq = &#39;year&#39;)
+    forecast &lt;- predict(m, future)
+    dygraph(cbind(
+      Historical = xts(state_data$y, order.by = state_data$ds),
+      Forecast = xts(forecast$yhat, order.by = forecast$ds)
+    )) %&gt;%
+      dySeries(&quot;Historical&quot;, color = &quot;navy&quot;) %&gt;%
+      dySeries(&quot;Forecast&quot;, color = &quot;red&quot;) %&gt;%
+      dyRangeSelector()
+  })
+}
 
-ggplot(yearly_cases, aes(x = Year, y = Total_Cases)) +
-  geom_line(color = &quot;orange&quot;, size = 1) +
-  geom_point(color = &quot;red&quot;) +
-  labs(title = &quot;Total Influenza Cases by Year (2000–2023)&quot;,
-       x = &quot;Year&quot;, y = &quot;Total Cases&quot;)</code></pre>
-<p><img src="final_analysis_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<hr />
-</div>
-<div id="peak-flu-week-analysis" class="section level2">
-<h2>🔥 Peak Flu Week Analysis</h2>
-<pre class="r"><code>peak_weeks &lt;- data %&gt;%
-  group_by(Week) %&gt;%
-  summarize(Average_Cases = mean(Total_A + Total_B, na.rm = TRUE)) %&gt;%
-  arrange(desc(Average_Cases)) %&gt;%
-  slice(1:5)
-
-peak_weeks</code></pre>
-<pre><code>## # A tibble: 5 × 2
-##    Week Average_Cases
-##   &lt;int&gt;         &lt;dbl&gt;
-## 1     6        15096.
-## 2     5        14441.
-## 3     7        13733.
-## 4     4        12322.
-## 5    52        12230.</code></pre>
-<hr />
-</div>
-<div id="correlation-between-ili-and-positive-flu-tests"
-class="section level2">
-<h2>🤝 Correlation Between ILI and % Positive Flu Tests</h2>
-<pre class="r"><code>cor_test &lt;- cor.test(data$Percent_Positive, data$Weighted_ILI, use = &quot;complete.obs&quot;)
-cor_test</code></pre>
-<pre><code>## 
-##  Pearson&#39;s product-moment correlation
-## 
-## data:  data$Percent_Positive and data$Weighted_ILI
-## t = 41.547, df = 1275, p-value &lt; 2.2e-16
-## alternative hypothesis: true correlation is not equal to 0
-## 95 percent confidence interval:
-##  0.7340826 0.7807728
-## sample estimates:
-##       cor 
-## 0.7583989</code></pre>
-<pre class="r"><code>ggplot(data, aes(x = Percent_Positive, y = Weighted_ILI)) +
-  geom_point(alpha = 0.5, color = &quot;cyan&quot;) +
-  geom_smooth(method = &quot;lm&quot;, color = &quot;yellow&quot;) +
-  labs(title = &quot;Correlation between % Positive Flu Tests and ILI Percentage&quot;,
-       x = &quot;% Positive Flu Tests&quot;, y = &quot;ILI Percentage&quot;)</code></pre>
-<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="final_analysis_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<hr />
-</div>
-<div id="flu-case-forecasting-arima-model" class="section level2">
-<h2>🔮 Flu Case Forecasting (ARIMA Model)</h2>
-<pre class="r"><code>library(forecast)
-library(tibble)
-
-yearly_cases_ts &lt;- ts(yearly_cases$Total_Cases, start = 2000)
-model &lt;- auto.arima(yearly_cases_ts)
-forecasted &lt;- forecast(model, h = 5)
-
-plot(forecasted, main = &quot;Forecasted Influenza Cases (Next 5 Years)&quot;)</code></pre>
-<p><img src="final_analysis_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<hr />
-</div>
-<div id="data-overview" class="section level2">
-<h2>🗂️ Data Overview</h2>
-<p>The data displayed in this analysis represents weekly influenza
-surveillance reports collected by the <strong>Centers for Disease
-Control and Prevention (CDC)</strong> from <strong>2000 to
-2023</strong>. It includes laboratory-confirmed influenza cases from
-clinical and public health labs across the United States, broken down by
-virus type (Influenza A &amp; B). Additionally, the dataset incorporates
-information on <strong>Influenza-Like Illness (ILI)</strong>, which
-measures the percentage of outpatient healthcare visits related to flu
-symptoms. This combined dataset captures over two decades of flu
-activity, providing insights into yearly trends, peak flu weeks, and the
-correlation between confirmed flu cases and ILI reports. The data is
-summarized and visualized to help users identify long-term patterns,
-annual fluctuations, and potential forecasting of future influenza
-seasons.</p>
-<hr />
-<footer style="font-size: 0.8em; margin-top: 30px;">
-Created by Garrett Warren | UVU Data Science Final Project | Spring 2025
-</footer>
-</div>
-</div>
+shinyApp(ui, server)</code></pre>
+<iframe data-deferred-src="appd21cb42e264591a640c214b3ea6e476d/?w=&amp;__subapp__=1" width="100%" height="400" class="shiny-frame shiny-frame-deferred"></iframe>
 
 
 
@@ -396,7 +328,7 @@ $(document).ready(function () {
 
 <script>
 $(document).ready(function () {
-  window.buildTabsets("TOC");
+  window.buildTabsets("section-TOC");
 });
 
 $(document).ready(function () {

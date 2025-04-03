@@ -1,14 +1,18 @@
-name: "influenza-tracker"
+name: "Influenza Data Science Project"
 output_dir: "docs"
 navbar:
-  title: "U.S. Influenza Tracker"
+  title: "Flu Dashboard"
   left:
-    - text: "Flu Trends Dashboard"
+    - text: "Home"
       href: index.html
     - text: "Outbreak Insights"
-      href: analysis.html
-    - text: "Raw Data Explorer"
-      href: data.html
+      href: outbreak_insights.html
+    - text: "Interactive Heatmap"
+      href: heatmap.html
+    - text: "Flu Forecasts & Predictions"
+      href: flu_forecast.html
+    - text: "Raw Data"
+      href: raw_data.html
     - text: "About Me"
       href: about.html
 output:

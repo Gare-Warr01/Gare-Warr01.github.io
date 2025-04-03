@@ -1,0 +1,50 @@
+
+---
+title: "Interactive Flu Heatmap"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(leaflet)
+library(leaflet.extras)
+library(readr)
+library(dplyr)
+flu_data <- read_csv("ICL_NREVSS_Summary.csv")
+state_centers <- data.frame(state.center, State = state.name)
+```
+
+```{r shiny_app}
+ui <- fluidPage(
+  sliderInput("year", "Select Year:",
+              min = min(flu_data$Year), max = max(flu_data$Year),
+              value = max(flu_data$Year), step = 1, sep = ""),
+  leafletOutput("flu_map", height = 600)
+)
+
+server <- function(input, output, session) {
+  output$flu_map <- renderLeaflet({
+    yearly_flu <- flu_data %>%
+      filter(Year == input$year) %>%
+      group_by(State) %>%
+      summarise(Total_Cases = sum(Total_Cases, na.rm = TRUE)) %>%
+      left_join(state_centers, by = "State")
+    pal <- colorNumeric("YlOrRd", domain = yearly_flu$Total_Cases)
+    leaflet(yearly_flu) %>%
+      addProviderTiles(providers$CartoDB.Positron) %>%
+      setView(lng = -98.583, lat = 39.833, zoom = 4) %>%
+      addCircleMarkers(
+        lng = ~x, lat = ~y,
+        radius = ~sqrt(Total_Cases)/2,
+        color = ~pal(Total_Cases),
+        stroke = FALSE, fillOpacity = 0.8,
+        popup = ~paste0("<b>", State, "</b><br>Total Cases: ", Total_Cases)
+      ) %>%
+      addLegend("bottomright", pal = pal, values = ~Total_Cases,
+                title = paste("Total Cases:", input$year))
+  })
+}
+
+shinyApp(ui, server)
+```

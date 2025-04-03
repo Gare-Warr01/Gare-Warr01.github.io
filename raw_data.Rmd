@@ -8,3 +8,7 @@ library(DT)
 data <- read.csv("cleaned_influenza_data.csv")
 datatable(data, options = list(pageLength = 10))
 ```
+```{r}
+dat <- read.csv("ICL_NREVSS_Summary.csv")
+datatable(dat, options = list(pageLength = 10))
+```

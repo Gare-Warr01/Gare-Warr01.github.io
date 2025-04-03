@@ -1,0 +1,46 @@
+
+---
+title: "Flu Forecasts & Predictions"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(shiny)
+library(prophet)
+library(dygraphs)
+library(dplyr)
+library(readr)
+library(xts)
+flu_data <- read_csv("ICL_NREVSS_Summary.csv")
+```
+
+```{r shiny_forecast}
+ui <- fluidPage(
+  selectInput("state", "Select State:", choices = unique(flu_data$State)),
+  numericInput("years", "Years Ahead to Forecast:", value = 2, min = 1, max = 5),
+  dygraphOutput("forecast_plot")
+)
+
+server <- function(input, output) {
+  output$forecast_plot <- renderDygraph({
+    state_data <- flu_data %>%
+      filter(State == input$state) %>%
+      group_by(Year) %>%
+      summarize(y = sum(Total_Cases)) %>%
+      mutate(ds = as.Date(paste0(Year, "-01-01")))
+    m <- prophet(state_data, yearly.seasonality = TRUE)
+    future <- make_future_dataframe(m, periods = input$years, freq = 'year')
+    forecast <- predict(m, future)
+    dygraph(cbind(
+      Historical = xts(state_data$y, order.by = state_data$ds),
+      Forecast = xts(forecast$yhat, order.by = forecast$ds)
+    )) %>%
+      dySeries("Historical", color = "navy") %>%
+      dySeries("Forecast", color = "red") %>%
+      dyRangeSelector()
+  })
+}
+
+shinyApp(ui, server)
+```
