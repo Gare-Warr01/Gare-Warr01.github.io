@@ -11,12 +11,12 @@
 
 
 
-<title>Influenza Tracker Website</title>
+<title>Tracking 20 Years of U.S. Flu Outbreaks</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -238,18 +238,21 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Influenza Tracker</a>
+      <a class="navbar-brand" href="index.html">U.S. Influenza Tracker</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">Home</a>
+  <a href="index.html">Flu Trends Dashboard</a>
 </li>
 <li>
-  <a href="analysis.html">Analysis</a>
+  <a href="analysis.html">Outbreak Insights</a>
 </li>
 <li>
-  <a href="data.html">Data Table</a>
+  <a href="data.html">Raw Data Explorer</a>
+</li>
+<li>
+  <a href="about.html">About Me</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -263,19 +266,70 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Influenza Tracker Website</h1>
+<h1 class="title toc-ignore">Tracking 20 Years of U.S. Flu
+Outbreaks</h1>
 
 </div>
 
 
-<div id="welcome-to-the-u.s.-influenza-tracker" class="section level1">
-<h1>Welcome to the U.S. Influenza Tracker</h1>
-<p>This website explores 20 years of influenza data from the CDC. Scroll
-through to explore national trends, flu case counts, and how flu-like
-illness impacted healthcare visits.</p>
-<p>Use the tabs to navigate: - <strong>Analysis</strong>: Interactive
-graphs and summaries - <strong>Data Table</strong>: Explore the raw
-data</p>
+<div id="u.s.-influenza-trends-20002023" class="section level1">
+<h1>U.S. Influenza Trends (2000–2023)</h1>
+<p><em>“Data doesn’t lie — the flu always comes back.”</em></p>
+<p>Welcome to the <strong>U.S. Influenza Tracker</strong>, an
+interactive website analyzing over two decades of influenza surveillance
+data from the <strong>Centers for Disease Control and Prevention
+(CDC)</strong>.</p>
+<hr />
+<div id="project-objective" class="section level2">
+<h2>Project Objective</h2>
+<p>The purpose of this project is to provide a clear, interactive, and
+data-driven overview of influenza trends in the U.S. over the past 20
+years. This website was created to demonstrate practical skills in:</p>
+<ul>
+<li>Data wrangling and analysis in R</li>
+<li>Interactive data visualization (Plotly, Leaflet)</li>
+<li>Building and deploying a website using R Markdown and GitHub
+Pages</li>
+</ul>
+<p>The goal is to make complex public health data accessible to a
+general audience.</p>
+<hr />
+</div>
+<div id="data-highlights" class="section level2">
+<h2>Data Highlights</h2>
+<ul>
+<li><strong>Time Period:</strong> 2000–2023</li>
+<li><strong>Total Specimens Analyzed:</strong> Over 10 million</li>
+<li><strong>Key Metrics:</strong> Influenza A &amp; B cases, % positive,
+ILI percentages</li>
+</ul>
+<hr />
+</div>
+<div id="explore-the-dashboard" class="section level2">
+<h2>Explore the Dashboard</h2>
+<ul>
+<li>View flu trends by year and virus type</li>
+<li>See national average ILI (Influenza-like Illness) percentages</li>
+<li>Explore an interactive U.S. map of flu cases</li>
+<li>Browse raw data and download for your own analysis</li>
+<li>Learn about the project creator</li>
+</ul>
+<hr />
+</div>
+<div id="data-source" class="section level2">
+<h2>Data Source</h2>
+<p>All data used in this project was obtained from the <strong>CDC
+FluView Surveillance System</strong>: <a
+href="https://www.cdc.gov/flu/weekly/fluviewinteractive.htm">https://www.cdc.gov/flu/weekly/fluviewinteractive.htm</a></p>
+<hr />
+<footer style="font-size: 0.8em; margin-top: 30px;">
+Created by Garrett Warr | UVU Data Science Final Project | Spring
+2025<br />
+Data Source: CDC FluView | This project is for educational purposes
+only.<br />
+Last Updated: April 2025
+</footer>
+</div>
 </div>
 
 

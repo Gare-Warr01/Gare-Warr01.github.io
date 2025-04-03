@@ -1,14 +1,55 @@
 ---
-title: "Influenza Tracker Website"
+title: "Tracking 20 Years of U.S. Flu Outbreaks"
 output: html_document
 ---
 
-# Welcome to the U.S. Influenza Tracker
+# U.S. Influenza Trends (2000–2023)
 
-This website explores 20 years of influenza data from the CDC. Scroll through to explore national trends, flu case counts, and how flu-like illness impacted healthcare visits.
+*"Data doesn’t lie — the flu always comes back."*
 
-Use the tabs to navigate:
-- **Analysis**: Interactive graphs and summaries
-- **Data Table**: Explore the raw data
+Welcome to the **U.S. Influenza Tracker**, an interactive website analyzing over two decades of influenza surveillance data from the **Centers for Disease Control and Prevention (CDC)**.
 
+---
 
+## Project Objective
+
+The purpose of this project is to provide a clear, interactive, and data-driven overview of influenza trends in the U.S. over the past 20 years. This website was created to demonstrate practical skills in:
+
+- Data wrangling and analysis in R
+- Interactive data visualization (Plotly, Leaflet)
+- Building and deploying a website using R Markdown and GitHub Pages
+
+The goal is to make complex public health data accessible to a general audience.
+
+---
+
+## Data Highlights
+
+- **Time Period:** 2000–2023
+- **Total Specimens Analyzed:** Over 10 million
+- **Key Metrics:** Influenza A & B cases, % positive, ILI percentages
+
+---
+
+## Explore the Dashboard
+
+- View flu trends by year and virus type
+- See national average ILI (Influenza-like Illness) percentages
+- Explore an interactive U.S. map of flu cases
+- Browse raw data and download for your own analysis
+- Learn about the project creator
+
+---
+
+## Data Source
+
+All data used in this project was obtained from the **CDC FluView Surveillance System**:
+[https://www.cdc.gov/flu/weekly/fluviewinteractive.htm](https://www.cdc.gov/flu/weekly/fluviewinteractive.htm)
+
+---
+
+<footer style="font-size: 0.8em; margin-top: 30px;">
+Created by Garrett Warr | UVU Data Science Final Project | Spring 2025  
+Data Source: CDC FluView | This project is for educational purposes only.  
+Last Updated: April 2025
+</footer>

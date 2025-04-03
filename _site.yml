@@ -1,7 +1,7 @@
 name: "influenza-tracker"
 output_dir: "docs"
 navbar:
-  title: " U.S. Influenza Tracker"
+  title: "U.S. Influenza Tracker"
   left:
     - text: "Flu Trends Dashboard"
       href: index.html
