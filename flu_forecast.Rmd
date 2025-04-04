@@ -1,46 +1,87 @@
-
 ---
-title: "Flu Forecasts & Predictions"
+title: "Flu Forecast & Interactive Heatmap Dashboard"
 output: html_document
-runtime: shiny
 ---
 
-```{r setup, include=FALSE}
-library(shiny)
-library(prophet)
-library(dygraphs)
-library(dplyr)
-library(readr)
-library(xts)
+## Project Overview
+
+This project uses CDC flu surveillance data to forecast influenza trends across the United States using **interactive maps** and **predictive modeling**.
+
+The dashboard is built using:
+- **R Shiny** for real-time interactivity
+- **Leaflet** for the U.S. heatmap visualization
+- **Prophet** for time-series forecasting
+- **Dygraphs** for smooth forecasting charts
+- **ICL_NREVSS_Summary.csv** as the primary data source
+
+---
+
+## Explore the Dashboard
+
+Click the link below or interact with the embedded dashboard:
+
+🔗 **[Launch Fullscreen Dashboard](https://gare-warr01.shinyapps.io/flu_forecast_app/)**
+
+<iframe src="https://gare-warr01.shinyapps.io/flu_forecast_app/"
+        width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc;">
+</iframe>
+
+---
+
+## Dashboard Features
+
+| Feature               | Description |
+|-----------------------|-------------|
+| Heatmap by State   | Explore flu subtype intensity per U.S. state by year |
+| Forecasting Tool   | Predict flu cases by subtype for the next 1–5 years |
+| Subtype Selector   | Choose between subtypes like A_H1N1_2009, A_H3, B, BVic, etc. |
+| State/National View | Toggle between individual state or all-states (U.S.) view |
+| Model Accuracy     | Forecast includes confidence intervals from Prophet |
+
+---
+
+## How the Forecast Works
+
+The app loads CDC subtype case data for each state and applies a machine learning model (`prophet`) to:
+
+1. **Visualize past trends**  
+2. **Forecast upcoming flu activity**  
+3. **Allow comparison between subtypes**
+
+In state mode, the **heatmap** and **forecast plot** sync together when a state is clicked.  
+In national mode, multiple subtypes can be viewed together in one graph.
+
+---
+
+## Dataset Overview
+
+Your input data file (`ICL_NREVSS_Summary.csv`) contains:
+
+- `State` — U.S. state name  
+- `Year` — Surveillance year  
+- Subtypes:  
+  - A_H1N1_2009  
+  - A_H3  
+  - A_Subtype_Not_Performed  
+  - B, BVic, BYam, H3N2v, A_H5  
+- `Total_Cases` — Total of all subtype cases
+
+---
+
+## Sample Code Used in the App
+
+```r
+# Load data and extract subtypes
 flu_data <- read_csv("ICL_NREVSS_Summary.csv")
-```
+subtype_columns <- colnames(flu_data)[!(colnames(flu_data) %in% c("State", "Year", "Total_Cases"))]
 
-```{r shiny_forecast}
-ui <- fluidPage(
-  selectInput("state", "Select State:", choices = unique(flu_data$State)),
-  numericInput("years", "Years Ahead to Forecast:", value = 2, min = 1, max = 5),
-  dygraphOutput("forecast_plot")
-)
+# Forecast setup
+df <- flu_data %>%
+  filter(State == selected_state()) %>%
+  group_by(Year) %>%
+  summarise(y = sum(get(input$subtype), na.rm = TRUE)) %>%
+  mutate(ds = as.Date(paste0(Year, "-01-01")))
 
-server <- function(input, output) {
-  output$forecast_plot <- renderDygraph({
-    state_data <- flu_data %>%
-      filter(State == input$state) %>%
-      group_by(Year) %>%
-      summarize(y = sum(Total_Cases)) %>%
-      mutate(ds = as.Date(paste0(Year, "-01-01")))
-    m <- prophet(state_data, yearly.seasonality = TRUE)
-    future <- make_future_dataframe(m, periods = input$years, freq = 'year')
-    forecast <- predict(m, future)
-    dygraph(cbind(
-      Historical = xts(state_data$y, order.by = state_data$ds),
-      Forecast = xts(forecast$yhat, order.by = forecast$ds)
-    )) %>%
-      dySeries("Historical", color = "navy") %>%
-      dySeries("Forecast", color = "red") %>%
-      dyRangeSelector()
-  })
-}
-
-shinyApp(ui, server)
-```
+m <- prophet(df, yearly.seasonality = TRUE)
+future <- make_future_dataframe(m, periods = input$years, freq = "year")
+forecast <- predict(m, future)
