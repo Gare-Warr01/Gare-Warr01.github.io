@@ -11,7 +11,7 @@
 
 
 
-<title>Flu Heatmap by Year</title>
+<title>Interactive Flu Heatmap by Year</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -272,43 +272,64 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Flu Heatmap by Year</h1>
+<h1 class="title toc-ignore">Interactive Flu Heatmap by Year</h1>
 
 </div>
 
 
-<div id="flu-heatmaps-20182023" class="section level1">
-<h1>Flu Heatmaps (2018–2023)</h1>
-<div id="flu-case-heatmap" class="section level2">
-<h2>2018 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>This dashboard presents an <strong>interactive heatmap of influenza
+cases across U.S. states</strong>, using publicly available data from
+the CDC NREVSS dataset (<code>ICL_NREVSS_Summary.csv</code>).</p>
+<ul>
+<li>The map is interactive and color-coded by the <strong>total number
+of flu cases per state</strong>.</li>
+<li>You can select a <strong>year from the dropdown</strong> to
+visualize how flu cases varied across time.</li>
+<li>The app is built in <strong>R using Shiny and Leaflet</strong>, and
+hosted on <a href="https://www.shinyapps.io">shinyapps.io</a>.</li>
+</ul>
+</div>
+<div id="live-interactive-map" class="section level2">
+<h2>Live Interactive Map</h2>
+<iframe src="https://gare-warr01.shinyapps.io/flu_heatmap_app/" width="100%" height="700px" frameborder="0" style="border: none;">
+</iframe>
 <hr />
 </div>
-<div id="flu-case-heatmap-1" class="section level2">
-<h2>2019 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
-<hr />
-</div>
-<div id="flu-case-heatmap-2" class="section level2">
-<h2>2020 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
-<hr />
-</div>
-<div id="flu-case-heatmap-3" class="section level2">
-<h2>2021 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
-<hr />
-</div>
-<div id="flu-case-heatmap-4" class="section level2">
-<h2>2022 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
-<hr />
-</div>
-<div id="flu-case-heatmap-5" class="section level2">
-<h2>2023 Flu Case Heatmap</h2>
-<pre><code>## Warning in validateCoords(lng, lat, funcName): Data contains 5 rows with either missing or invalid lat/lon values and will be ignored</code></pre>
-<hr />
-</div>
+<div id="how-it-was-built" class="section level2">
+<h2>How It Was Built</h2>
+<p>Below is the full code used to create the Shiny app:</p>
+<p>```r library(shiny) library(leaflet) library(dplyr)
+library(readr)</p>
+<p>flu_data &lt;- read.csv(“ICL_NREVSS_Summary.csv”) state_centers &lt;-
+data.frame(state.center, State = state.name)</p>
+<p>ui &lt;- fluidPage( titlePanel(“Flu Case Heatmap by Year”),
+sidebarLayout( sidebarPanel( selectInput(“year”, “Select Year”, choices
+= sort(unique(flu_data$Year)), selected = 2023) ), mainPanel(
+leafletOutput(“fluMap”, height = “600px”) ) ) )</p>
+<p>server &lt;- function(input, output, session) { output<span
+class="math inline">\(fluMap &lt;- renderLeaflet({
+    yearly_flu &lt;- flu_data %&gt;%
+      filter(Year == input\)</span>year) %&gt;% group_by(State) %&gt;%
+summarise(Total_Cases = sum(Total_Cases, na.rm = TRUE)) %&gt;%
+left_join(state_centers, by = “State”)</p>
+<pre><code>pal &lt;- colorNumeric(&quot;YlOrRd&quot;, domain = yearly_flu$Total_Cases)
+
+leaflet(yearly_flu) %&gt;%
+  addProviderTiles(providers$CartoDB.Positron) %&gt;%
+  setView(lng = -98.583, lat = 39.833, zoom = 4) %&gt;%
+  addCircleMarkers(
+    lng = ~x, lat = ~y,
+    radius = ~sqrt(Total_Cases) / 2,
+    color = ~pal(Total_Cases),
+    stroke = FALSE, fillOpacity = 0.8,
+    popup = ~paste0(&quot;&lt;b&gt;&quot;, State, &quot;&lt;/b&gt;&lt;br&gt;Total Cases: &quot;, Total_Cases)
+  ) %&gt;%
+  addLegend(&quot;bottomright&quot;, pal = pal, values = ~Total_Cases,
+            title = paste(&quot;Total Cases in&quot;, input$year))</code></pre>
+<p>}) }</p>
+<p>shinyApp(ui, server)</p>
 </div>
 
 

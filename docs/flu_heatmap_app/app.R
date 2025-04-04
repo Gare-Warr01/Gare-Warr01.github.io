@@ -1,29 +1,5 @@
----
-title: "Interactive Flu Heatmap by Year"
-output: html_document
----
+# app.R
 
-## Overview
-
-This dashboard presents an **interactive heatmap of influenza cases across U.S. states**, using publicly available data from the CDC NREVSS dataset (`ICL_NREVSS_Summary.csv`).
-
-- The map is interactive and color-coded by the **total number of flu cases per state**.
-- You can select a **year from the dropdown** to visualize how flu cases varied across time.
-- The app is built in **R using Shiny and Leaflet**, and hosted on [shinyapps.io](https://www.shinyapps.io).
-
-## Live Interactive Map
-
-<iframe src="https://gare-warr01.shinyapps.io/flu_heatmap_app/"
-        width="100%" height="700px" frameborder="0" style="border: none;">
-</iframe>
-
----
-
-## How It Was Built
-
-Below is the full code used to create the Shiny app:
-
-```r
 library(shiny)
 library(leaflet)
 library(dplyr)
@@ -51,9 +27,9 @@ server <- function(input, output, session) {
       group_by(State) %>%
       summarise(Total_Cases = sum(Total_Cases, na.rm = TRUE)) %>%
       left_join(state_centers, by = "State")
-
+    
     pal <- colorNumeric("YlOrRd", domain = yearly_flu$Total_Cases)
-
+    
     leaflet(yearly_flu) %>%
       addProviderTiles(providers$CartoDB.Positron) %>%
       setView(lng = -98.583, lat = 39.833, zoom = 4) %>%
@@ -70,3 +46,8 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+library(rsconnect)
+rsconnect::setAccountInfo(name='gare-warr01',
+                          token='152F106DAB7BA7439B68DA2AA501288F',
+                          secret='43uIc99VCXZmu5BqpgxCtZDJuH6TYKXX7+z1He7T')
