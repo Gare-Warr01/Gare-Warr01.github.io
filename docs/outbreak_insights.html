@@ -11,7 +11,7 @@
 
 
 
-<title>Analysis</title>
+<title>Influenza Analysis Overview</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +29,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -227,6 +230,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -234,6 +300,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -257,7 +333,7 @@ $(document).ready(function () {
   <a href="outbreak_insights.html">Outbreak Insights</a>
 </li>
 <li>
-  <a href="heatmap.html">Interactive Heatmap</a>
+  <a href="heatmap.html">Heatmap</a>
 </li>
 <li>
   <a href="flu_forecast.html">Flu Forecasts &amp; Predictions</a>
@@ -280,36 +356,92 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Analysis</h1>
+<h1 class="title toc-ignore">Influenza Analysis Overview</h1>
 
 </div>
 
 
-<div id="total-influenza-cases-over-time" class="section level2">
-<h2>Total Influenza Cases Over Time</h2>
+<div id="total-influenza-cases-over-time" class="section level1"
+number="1">
+<h1><span class="header-section-number">1</span> Total Influenza Cases
+Over Time</h1>
 <pre class="r"><code>data %&gt;%
   group_by(Year) %&gt;%
   summarize(Total_A = sum(Total_A, na.rm = TRUE),
             Total_B = sum(Total_B, na.rm = TRUE)) %&gt;%
   pivot_longer(cols = c(Total_A, Total_B), names_to = &quot;Type&quot;, values_to = &quot;Count&quot;) %&gt;%
-  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = &#39;scatter&#39;, mode = &#39;lines+markers&#39;)</code></pre>
+  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = &#39;scatter&#39;, mode = &#39;lines+markers&#39;) %&gt;%
+  layout(title = &quot;Total Influenza A &amp; B Cases by Year&quot;)</code></pre>
 <pre><code>## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels
 ## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-70bb47de5465a190d9c2" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-70bb47de5465a190d9c2">{"x":{"visdat":{"6af65ef1f637":["function () ","plotlyVisDat"]},"cur_data":"6af65ef1f637","attrs":{"6af65ef1f637":{"x":{},"y":{},"mode":"lines+markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1830,56710,117405,147794,166191,117763,29469,424433,124683,217319,350577],"mode":"lines+markers","type":"scatter","name":"Total_A","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[419,4508,2753,3822,557,5880,5040,4880,12284,11205,3587,11440,10609,18391,11228,20028,24566,45625,72590,48951,78854,1517,3827,30887,88821,29567],"mode":"lines+markers","type":"scatter","name":"Total_B","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-e4b09d337a21f865782b" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-e4b09d337a21f865782b">{"x":{"visdat":{"6feb6ee09ec8":["function () ","plotlyVisDat"]},"cur_data":"6feb6ee09ec8","attrs":{"6feb6ee09ec8":{"x":{},"y":{},"mode":"lines+markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Total Influenza A & B Cases by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Count"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1830,56710,117405,147794,166191,117763,29469,424433,124683,217319,350577],"mode":"lines+markers","type":"scatter","name":"Total_A","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[419,4508,2753,3822,557,5880,5040,4880,12284,11205,3587,11440,10609,18391,11228,20028,24566,45625,72590,48951,78854,1517,3827,30887,88821,29567],"mode":"lines+markers","type":"scatter","name":"Total_B","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="ili-trends-over-time" class="section level2">
-<h2>ILI Trends Over Time</h2>
+<div id="ili-trends-over-time" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> ILI Trends Over
+Time</h1>
 <pre class="r"><code>data %&gt;%
   group_by(Year) %&gt;%
   summarize(Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)) %&gt;%
-  plot_ly(x = ~Year, y = ~Avg_ILI, type = &#39;bar&#39;, name = &#39;Avg Weighted ILI&#39;)</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-77e0d5dc39cccf746901" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-77e0d5dc39cccf746901">{"x":{"visdat":{"6af675955f6c":["function () ","plotlyVisDat"]},"cur_data":"6af675955f6c","attrs":{"6af675955f6c":{"x":{},"y":{},"name":"Avg Weighted ILI","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg_ILI"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"name":"Avg Weighted ILI","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+  plot_ly(x = ~Year, y = ~Avg_ILI, type = &#39;bar&#39;, name = &#39;Avg Weighted ILI&#39;) %&gt;%
+  layout(title = &quot;Average ILI by Year&quot;)</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4116bc05be4122532f36" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-4116bc05be4122532f36">{"x":{"visdat":{"6feb3bd4897b":["function () ","plotlyVisDat"]},"cur_data":"6feb3bd4897b","attrs":{"6feb3bd4897b":{"x":{},"y":{},"name":"Avg Weighted ILI","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average ILI by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg_ILI"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"name":"Avg Weighted ILI","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="peak-flu-years-top-5" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Peak Flu Years (Top
+5)</h1>
+<pre class="r"><code>data %&gt;%
+  group_by(Year) %&gt;%
+  summarize(
+    Total_A = sum(Total_A, na.rm = TRUE),
+    Total_B = sum(Total_B, na.rm = TRUE),
+    Total_Cases = Total_A + Total_B
+  ) %&gt;%
+  arrange(desc(Total_Cases)) %&gt;%
+  head(5)</code></pre>
+<pre><code>## # A tibble: 5 × 4
+##    Year Total_A Total_B Total_Cases
+##   &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;       &lt;dbl&gt;
+## 1  2022  424433    3827      428260
+## 2  2025  350577   29567      380144
+## 3  2024  217319   88821      306140
+## 4  2018  147794   72590      220384
+## 5  2019  166191   48951      215142</code></pre>
+</div>
+<div id="ili-vs.-confirmed-cases" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> ILI vs. Confirmed
+Cases</h1>
+<pre class="r"><code>data %&gt;%
+  group_by(Year) %&gt;%
+  summarize(
+    Total_Cases = sum(Total_A + Total_B, na.rm = TRUE),
+    Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)
+  ) %&gt;%
+  plot_ly(x = ~Avg_ILI, y = ~Total_Cases, type = &#39;scatter&#39;, mode = &#39;markers+text&#39;,
+          text = ~Year) %&gt;%
+  layout(title = &quot;ILI vs. Total Influenza Cases&quot;,
+         xaxis = list(title = &quot;Average ILI %&quot;),
+         yaxis = list(title = &quot;Total Confirmed Cases&quot;))</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-70bb47de5465a190d9c2" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-70bb47de5465a190d9c2">{"x":{"visdat":{"6feb6c9fe3a2":["function () ","plotlyVisDat"]},"cur_data":"6feb6c9fe3a2","attrs":{"6feb6c9fe3a2":{"x":{},"y":{},"mode":"markers+text","text":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"ILI vs. Total Influenza Cases","xaxis":{"domain":[0,1],"automargin":true,"title":"Average ILI %"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Total Confirmed Cases"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3120,81276,163030,220384,215142,196617,30986,428260,155570,306140,380144],"mode":"markers+text","text":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="key-takeaways" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Key Takeaways</h1>
+<ul>
+<li><strong>2017–2018 and 2009</strong> were among the worst flu seasons
+based on total cases and ILI percentages.</li>
+<li><strong>ILI trends</strong> correlate moderately with confirmed case
+surges.</li>
+<li><strong>Seasonality</strong> remains consistent, with spikes in
+Weeks 1–12 (if weekly data available).</li>
+</ul>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -342,6 +474,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

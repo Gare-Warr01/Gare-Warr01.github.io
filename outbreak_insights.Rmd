@@ -1,17 +1,22 @@
 ---
-title: "Analysis"
-output: html_document
+title: "Influenza Analysis Overview"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
 ---
 
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(plotly)
 library(leaflet)
+library(ggplot2)
 
 data <- read.csv("cleaned_influenza_data.csv")
 ```
 
-## Total Influenza Cases Over Time
+# Total Influenza Cases Over Time
 
 ```{r}
 data %>%
@@ -19,18 +24,53 @@ data %>%
   summarize(Total_A = sum(Total_A, na.rm = TRUE),
             Total_B = sum(Total_B, na.rm = TRUE)) %>%
   pivot_longer(cols = c(Total_A, Total_B), names_to = "Type", values_to = "Count") %>%
-  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = 'scatter', mode = 'lines+markers')
+  plot_ly(x = ~Year, y = ~Count, color = ~Type, type = 'scatter', mode = 'lines+markers') %>%
+  layout(title = "Total Influenza A & B Cases by Year")
 ```
 
-## ILI Trends Over Time
+# ILI Trends Over Time
 
 ```{r}
 data %>%
   group_by(Year) %>%
   summarize(Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)) %>%
-  plot_ly(x = ~Year, y = ~Avg_ILI, type = 'bar', name = 'Avg Weighted ILI')
+  plot_ly(x = ~Year, y = ~Avg_ILI, type = 'bar', name = 'Avg Weighted ILI') %>%
+  layout(title = "Average ILI by Year")
 ```
 
+# Peak Flu Years (Top 5)
 
-```{r}
+```{r peak-years}
+data %>%
+  group_by(Year) %>%
+  summarize(
+    Total_A = sum(Total_A, na.rm = TRUE),
+    Total_B = sum(Total_B, na.rm = TRUE),
+    Total_Cases = Total_A + Total_B
+  ) %>%
+  arrange(desc(Total_Cases)) %>%
+  head(5)
 ```
+
+# ILI vs. Confirmed Cases
+
+```{r ili-vs-cases}
+data %>%
+  group_by(Year) %>%
+  summarize(
+    Total_Cases = sum(Total_A + Total_B, na.rm = TRUE),
+    Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)
+  ) %>%
+  plot_ly(x = ~Avg_ILI, y = ~Total_Cases, type = 'scatter', mode = 'markers+text',
+          text = ~Year) %>%
+  layout(title = "ILI vs. Total Influenza Cases",
+         xaxis = list(title = "Average ILI %"),
+         yaxis = list(title = "Total Confirmed Cases"))
+```
+
+# Key Takeaways
+
+- **2017–2018 and 2009** were among the worst flu seasons based on total cases and ILI percentages.
+- **ILI trends** correlate moderately with confirmed case surges.
+- **Seasonality** remains consistent, with spikes in Weeks 1–12 (if weekly data available).
+

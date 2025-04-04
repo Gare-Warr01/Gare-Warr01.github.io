@@ -7,7 +7,7 @@ navbar:
       href: index.html
     - text: "Outbreak Insights"
       href: outbreak_insights.html
-    - text: "Interactive Heatmap"
+    - text: "Heatmap"
       href: heatmap.html
     - text: "Flu Forecasts & Predictions"
       href: flu_forecast.html
