@@ -47,7 +47,3 @@ server <- function(input, output, session) {
 
 shinyApp(ui, server)
 
-library(rsconnect)
-rsconnect::setAccountInfo(name='gare-warr01',
-                          token='152F106DAB7BA7439B68DA2AA501288F',
-                          secret='43uIc99VCXZmu5BqpgxCtZDJuH6TYKXX7+z1He7T')
