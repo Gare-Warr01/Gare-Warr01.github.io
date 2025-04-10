@@ -1,14 +1,134 @@
+
 ---
-title: "Data Table"
-output: html_document
+title: "Raw Data Tables and Summaries"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    theme: flatly
+    df_print: paged
 ---
 
-```{r}
+```{r setup, include=FALSE}
 library(DT)
-data <- read.csv("cleaned_influenza_data.csv")
-datatable(data, options = list(pageLength = 10))
+library(readr)
 ```
+
+# Overview
+
+This report contains the raw data sources used in the influenza forecasting and dashboard project. Each dataset is presented below with a brief explanation of what was extracted or learned and how it contributed to the final analysis.
+
+---
+
+## Cleaned Influenza Data
+
+<details>
+<summary><strong>Click to expand Table 1: Cleaned Influenza Data</strong></summary>
+
 ```{r}
-dat <- read.csv("ICL_NREVSS_Summary.csv")
-datatable(dat, options = list(pageLength = 10))
+influenza_full <- read_csv("cleaned_influenza_data.csv")
+datatable(influenza_full, options = list(pageLength = 10),
+          caption = "Table 1. Cleaned influenza dataset used for forecasting and model training.")
 ```
+
+</details>
+
+**Usage:**  
+This dataset formed the core of the project. It was cleaned and standardized for modeling purposes, with weekly ILI percentages and lab-confirmed flu subtypes per region. It powered the main visualizations, state-level comparisons, and trend analyses across time.
+
+---
+
+## Forecast Data (All States)
+
+<details>
+<summary><strong>Click to expand Table 2: Forecast Outputs</strong></summary>
+
+```{r}
+forecast_data <- read_csv("flu_forecast_all_states.csv")
+datatable(forecast_data, options = list(pageLength = 10),
+          caption = "Table 2. Prophet forecast results for all U.S. states.")
+```
+
+</details>
+
+**Usage:**  
+This dataset contains time-series forecasts generated with Prophet for every state. It was used to visualize predicted ILI trends, populate the interactive dashboard, and identify potential flu hotspots.
+
+---
+
+## ICL NREVSS Summary Data
+
+<details>
+<summary><strong>Click to expand Table 3: NREVSS Summary</strong></summary>
+
+```{r}
+nrevss_summary <- read_csv("ICL_NREVSS_Summary.csv")
+datatable(nrevss_summary, options = list(pageLength = 10),
+          caption = "Table 3. Summary-level CDC influenza detections reported by labs.")
+```
+
+</details>
+
+**Usage:**  
+This file was used to provide national and regional context for flu activity. It helped validate patterns seen in ILI data and offered insight into subtype prevalence and total specimens tested.
+
+---
+
+## ICL NREVSS Long Format
+
+<details>
+<summary><strong>Click to expand Table 4: NREVSS Long Format</strong></summary>
+
+```{r}
+nrevss_long <- read_csv("ICL_NREVSS_LongFormat.csv")
+datatable(nrevss_long, options = list(pageLength = 10),
+          caption = "Table 4. Long-format NREVSS data for time-series plotting.")
+```
+
+</details>
+
+**Usage:**  
+This version of the NREVSS dataset allowed for flexible plotting and filtering by region, subtype, and time. It was used in trendline visualizations and seasonal comparison charts.
+
+---
+
+## State-Level Cleaned Influenza Data
+
+<details>
+<summary><strong>Click to expand Table 5: Cleaned State-Level Influenza Data</strong></summary>
+
+```{r}
+state_data <- read_csv("cleaned_influenza_state_data.csv")
+datatable(state_data, options = list(pageLength = 10),
+          caption = "Table 5. Weekly ILI data at the state level.")
+```
+
+</details>
+
+**Usage:**  
+This dataset provided more granular insights at the state level and was used in dashboards to compare flu activity between states, support filtering, and assess the geographic spread of influenza.
+
+---
+
+## National Trend by Year
+
+<details>
+<summary><strong>Click to expand Table 6: National Trend by Year</strong></summary>
+
+```{r}
+national_trend <- read_csv("national_trend_by_year.csv")
+datatable(national_trend, options = list(pageLength = 10),
+          caption = "Table 6. Historical national ILI trends by year.")
+```
+
+</details>
+
+**Usage:**  
+This dataset was used as a benchmark for evaluating model predictions. It provided historical flu season comparisons and supported visualizations of peak timing and intensity over multiple years.
+
+---
+
+## Conclusion
+
+Each of these datasets served a specific role in the forecasting and visualization process, from national surveillance data to model-generated forecasts. Together, they enabled the creation of a comprehensive, data-driven dashboard for tracking and projecting flu activity across the United States.

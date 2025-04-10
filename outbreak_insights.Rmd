@@ -1,76 +1,192 @@
+
 ---
-title: "Influenza Analysis Overview"
-output:
+title: "Outbreak Insights"
+output: 
   html_document:
+    theme: flatly
     toc: true
-    toc_float: true
-    number_sections: true
+    toc-depth: 2
+    number-sections: true
 ---
 
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(plotly)
-library(leaflet)
 library(ggplot2)
 
+# Load all data
 data <- read.csv("cleaned_influenza_data.csv")
+summary_data <- read.csv("ICL_NREVSS_Summary.csv")
+forecast_data <- read.csv("flu_forecast_all_states.csv")
 ```
 
-# Total Influenza Cases Over Time
+# 1. Total Influenza Cases Over Time
 
-```{r}
+This chart displays the yearly total confirmed cases of Influenza A and B in the United States.
+
+```{r, echo=FALSE}
 data %>%
   group_by(Year) %>%
-  summarize(Total_A = sum(Total_A, na.rm = TRUE),
-            Total_B = sum(Total_B, na.rm = TRUE)) %>%
+  summarize(
+    Total_A = sum(Total_A, na.rm = TRUE),
+    Total_B = sum(Total_B, na.rm = TRUE)
+  ) %>%
   pivot_longer(cols = c(Total_A, Total_B), names_to = "Type", values_to = "Count") %>%
   plot_ly(x = ~Year, y = ~Count, color = ~Type, type = 'scatter', mode = 'lines+markers') %>%
-  layout(title = "Total Influenza A & B Cases by Year")
+  layout(title = "Total Influenza A & B Cases by Year",
+         xaxis = list(title = "Year"),
+         yaxis = list(title = "Confirmed Cases"))
 ```
 
-# ILI Trends Over Time
+**What you're seeing:**  
+A comparison of Influenza A and B trends over time. Influenza A typically dominates most seasons, but spikes in B (such as in 2012 and 2018) provide insight into unusual activity.
 
-```{r}
+---
+
+# 2. ILI (Influenza-Like Illness) Trends
+
+```{r, echo=FALSE}
 data %>%
   group_by(Year) %>%
   summarize(Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)) %>%
-  plot_ly(x = ~Year, y = ~Avg_ILI, type = 'bar', name = 'Avg Weighted ILI') %>%
-  layout(title = "Average ILI by Year")
+  plot_ly(x = ~Year, y = ~Avg_ILI, type = 'bar', name = 'Avg ILI') %>%
+  layout(title = "Average ILI by Year",
+         xaxis = list(title = "Year"),
+         yaxis = list(title = "Avg ILI (%)"))
 ```
 
-# Peak Flu Years (Top 5)
+**What you're seeing:**  
+Weighted ILI reflects flu-like symptoms as reported by patients and providers. It often signals the early rise of flu season before lab-confirmed case surges.
 
-```{r peak-years}
+---
+
+# 3. Top 5 Peak Seasons by Confirmed Cases
+
+```{r, echo=FALSE}
 data %>%
   group_by(Year) %>%
   summarize(
     Total_A = sum(Total_A, na.rm = TRUE),
     Total_B = sum(Total_B, na.rm = TRUE),
-    Total_Cases = Total_A + Total_B
+    Total = Total_A + Total_B
   ) %>%
-  arrange(desc(Total_Cases)) %>%
+  arrange(desc(Total)) %>%
   head(5)
 ```
 
-# ILI vs. Confirmed Cases
+**What you're seeing:**  
+A table ranking the five flu seasons with the highest number of confirmed cases. Use this for historical comparison and identifying outlier seasons like the 2009 H1N1 pandemic.
 
-```{r ili-vs-cases}
+---
+
+# 4. ILI vs. Confirmed Case Correlation
+
+```{r, echo=FALSE}
 data %>%
   group_by(Year) %>%
   summarize(
     Total_Cases = sum(Total_A + Total_B, na.rm = TRUE),
     Avg_ILI = mean(Weighted_ILI, na.rm = TRUE)
   ) %>%
-  plot_ly(x = ~Avg_ILI, y = ~Total_Cases, type = 'scatter', mode = 'markers+text',
-          text = ~Year) %>%
-  layout(title = "ILI vs. Total Influenza Cases",
-         xaxis = list(title = "Average ILI %"),
-         yaxis = list(title = "Total Confirmed Cases"))
+  plot_ly(
+    x = ~Avg_ILI,
+    y = ~Total_Cases,
+    type = 'scatter',
+    mode = 'markers',
+    marker = list(size = 10, color = ~Year, colorscale = 'Viridis'),
+    text = ~paste("Year:", Year,
+                  "<br>Avg ILI:", round(Avg_ILI, 2),
+                  "<br>Total Cases:", Total_Cases),
+    hoverinfo = 'text'
+  ) %>%
+  layout(
+    title = "ILI vs. Confirmed Influenza Cases",
+    xaxis = list(title = "Average ILI (%)"),
+    yaxis = list(title = "Total Confirmed Cases"),
+    showlegend = FALSE
+  )
 ```
 
-# Key Takeaways
+**What you're seeing:**  
+A scatterplot assessing the relationship between average ILI percentages and total confirmed flu cases by year. Not every ILI spike translates to a high confirmed flu season—but patterns emerge.
 
-- **2017–2018 and 2009** were among the worst flu seasons based on total cases and ILI percentages.
-- **ILI trends** correlate moderately with confirmed case surges.
-- **Seasonality** remains consistent, with spikes in Weeks 1–12 (if weekly data available).
+---
 
+# 5. Subtype Trends Over Time
+
+```{r flu-subtype-trends, echo=FALSE}
+summary_data %>%
+  group_by(Year) %>%
+  summarize(
+    H1N1 = sum(A_H1N1_2009, na.rm = TRUE),
+    H3 = sum(A_H3, na.rm = TRUE),
+    BVic = sum(BVic, na.rm = TRUE),
+    BYam = sum(BYam, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(H1N1, H3, BVic, BYam), names_to = "Subtype", values_to = "Cases") %>%
+  ggplot(aes(x = Year, y = Cases, color = Subtype)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Flu Subtype Trends Over Time",
+    y = "Confirmed Cases",
+    x = "Year"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+**What you're seeing:**  
+Trends in confirmed cases by flu subtype: H1N1, H3, and both B lineages (Victoria and Yamagata). The visualization captures subtype seasonality and alternating dominance.
+
+---
+
+# 6. Average Weekly Activity Curve
+
+```{r flu-weekly-trend, echo=FALSE}
+data %>%
+  group_by(Week) %>%
+  summarize(
+    Avg_A = mean(Total_A, na.rm = TRUE),
+    Avg_B = mean(Total_B, na.rm = TRUE)
+  ) %>%
+  pivot_longer(cols = c(Avg_A, Avg_B), names_to = "Type", values_to = "Cases") %>%
+  ggplot(aes(x = Week, y = Cases, color = Type)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(
+    title = "Average Weekly Influenza Activity (2000–2023)",
+    y = "Average Weekly Cases",
+    x = "Week Number"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+**What you're seeing:**  
+The average week-by-week case load across all flu seasons from 2000–2023. Flu activity peaks consistently between January and March, confirming classic winter seasonality.
+
+---
+
+# 7. Forecast Model Preview (Alabama)
+
+```{r, echo=FALSE}
+forecast_data %>%
+  filter(State == "Alabama") %>%
+  ggplot(aes(x = as.Date(ds))) +
+  geom_line(aes(y = yhat, color = "Forecast")) +
+  geom_line(aes(y = trend, color = "Actual Trend")) +
+  labs(title = "Forecasted vs Actual Flu Trend (Alabama)",
+       x = "Date", y = "Cases") +
+  scale_color_manual(values = c("Forecast" = "steelblue", "Actual Trend" = "firebrick"))
+```
+
+**What you're seeing:**  
+Prophet model predictions for Alabama flu cases compared to the actual trend. Good alignment indicates potential for forecasting tools in public health planning.
+
+---
+
+# Summary: What the Data Shows
+
+- **Strain shifts matter:** H3N2 and H1N1 alternate, B lineages vary  
+- **ILI as an early signal**: Often spikes before confirmed case loads  
+- **Seasonal window:** Flu activity consistently peaks in winter months  
+- **Forecast use:** Knowing past peaks and subtypes improves model targeting

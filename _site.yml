@@ -1,7 +1,8 @@
 name: "Influenza Data Science Project"
 output_dir: "docs"
+
 navbar:
-  title: "Flu Dashboard"
+  title: "Tracking 20 Years of U.S. Flu Outbreaks"
   left:
     - text: "Home"
       href: index.html
@@ -15,6 +16,12 @@ navbar:
       href: raw_data.html
     - text: "About Me"
       href: about.html
+
 output:
   html_document:
+    toc: true
+    toc_depth: 2
     theme: flatly
+
+includes:
+  in_header: favicon.html

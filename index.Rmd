@@ -1,55 +1,94 @@
 ---
-title: "Tracking 20 Years of U.S. Flu Outbreaks"
-output: html_document
+title: "Home"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    theme: flatly
+    includes:
+      in_header: favicon.html
 ---
 
-# U.S. Influenza Trends (2000–2023)
+# U.S. Influenza Trends & Forecasting (2000–2023)
 
-*"Data doesn’t lie — the flu always comes back."*
+> *“Influenza doesn't just return each season—it evolves. Tracking it is not just science, it's strategy.”*
 
-Welcome to the **U.S. Influenza Tracker**, an interactive website analyzing over two decades of influenza surveillance data from the **Centers for Disease Control and Prevention (CDC)**.
-
----
-
-## Project Objective
-
-The purpose of this project is to provide a clear, interactive, and data-driven overview of influenza trends in the U.S. over the past 20 years. This website was created to demonstrate practical skills in:
-
-- Data wrangling and analysis in R
-- Interactive data visualization (Plotly, Leaflet)
-- Building and deploying a website using R Markdown and GitHub Pages
-
-The goal is to make complex public health data accessible to a general audience.
+Welcome to the **U.S. Influenza Forecasting Hub**, an interactive data science project that analyzes over two decades of CDC flu surveillance data to uncover patterns—and predict the future.
 
 ---
 
-## Data Highlights
+## Research Question
 
-- **Time Period:** 2000–2023
-- **Total Specimens Analyzed:** Over 10 million
-- **Key Metrics:** Influenza A & B cases, % positive, ILI percentages
+**How can historical flu trends and subtype patterns be used to forecast the emergence and severity of future influenza strains in the United States?**
+
+This site explores that question by blending time series data, geospatial mapping, and machine learning-powered forecasting.
 
 ---
 
-## Explore the Dashboard
+## Project Purpose
 
-- View flu trends by year and virus type
-- See national average ILI (Influenza-like Illness) percentages
-- Explore an interactive U.S. map of flu cases
-- Browse raw data and download for your own analysis
-- Learn about the project creator
+Built as a capstone for the **UVU Data Science program**, this website demonstrates:
+
+- Data wrangling & cleaning (tidyverse, lubridate)  
+- Interactive visualizations (Plotly, Leaflet, Shiny)  
+- Forecasting models (Prophet)  
+- Deployment via R Markdown & GitHub Pages  
+
+The goal is to present flu surveillance data in an intuitive, accessible, and predictive format—bridging science, public health, and storytelling.
+
+---
+
+## Why This Matters
+
+Influenza surveillance is crucial for:
+
+- Tracking the rise and fall of seasonal outbreaks  
+- Anticipating dominant viral strains (H1N1, H3N2, B/Yamagata, etc.)  
+- Informing public health policy and vaccine development  
+- Raising awareness of seasonal and pandemic-level threats  
+
+By learning from past flu seasons, we can better prepare for what’s ahead.
+
+---
+
+## What You’ll Find
+
+- Outbreak Insights — Weekly case trends and viral subtype distributions  
+- Flu Forecasting — Machine learning models predict next season’s behavior  
+- Heatmaps — Geographic flu spread across U.S. regions  
+- Raw Data — Download the original dataset for your own analysis  
+- About the Author — Learn about the creator and project story  
+
+---
+
+## Data Summary
+
+- Years Covered: 2000–2023  
+- Tested Samples: 10+ million  
+- Key Metrics: ILI (Influenza-like Illness), % Positive, Strain Proportions  
 
 ---
 
 ## Data Source
 
-All data used in this project was obtained from the **CDC FluView Surveillance System**:
+All data sourced from the **CDC FluView Interactive Portal**:  
 [https://www.cdc.gov/flu/weekly/fluviewinteractive.htm](https://www.cdc.gov/flu/weekly/fluviewinteractive.htm)
 
 ---
 
-<footer style="font-size: 0.8em; margin-top: 30px;">
-Created by Garrett Warr | UVU Data Science Final Project | Spring 2025  
-Data Source: CDC FluView | This project is for educational purposes only.  
-Last Updated: April 2025
+<div style="width: 100%; overflow: hidden; margin-top: 40px;">
+  <img src="banner.png" alt="Flu Tracker Banner"
+       style="width: 100%; max-height: 180px; object-fit: contain; display: block; margin: 0 auto;">
+</div>
+
+<footer style="font-size: 0.9em; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; color: #555;">
+  <p style="margin: 4px 0;">
+    Created by Garrett Warr | <strong>UVU Data Science Capstone</strong> | Spring 2025  
+  </p>
+  <p style="margin: 4px 0;">
+    Data Source: CDC FluView | Educational Use Only  
+  </p>
+  <p style="margin: 4px 0;">
+    Last Updated: April 2025
+  </p>
 </footer>

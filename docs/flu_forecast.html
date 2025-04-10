@@ -238,7 +238,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Flu Dashboard</a>
+      <a class="navbar-brand" href="index.html">Tracking 20 Years of U.S. Flu Outbreaks</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -277,35 +277,88 @@ Dashboard</h1>
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#summary" id="toc-summary"><span
+class="toc-section-number">1</span> Summary</a></li>
+<li><a href="#project-overview" id="toc-project-overview"><span
+class="toc-section-number">2</span> Project Overview</a></li>
+<li><a href="#explore-the-dashboard"
+id="toc-explore-the-dashboard"><span class="toc-section-number">3</span>
+Explore the Dashboard</a></li>
+<li><a href="#dashboard-features" id="toc-dashboard-features"><span
+class="toc-section-number">4</span> Dashboard Features</a></li>
+<li><a href="#how-the-forecast-works"
+id="toc-how-the-forecast-works"><span
+class="toc-section-number">5</span> How the Forecast Works</a></li>
+<li><a href="#forecast-method-summary"
+id="toc-forecast-method-summary"><span
+class="toc-section-number">6</span> Forecast Method Summary</a></li>
+<li><a href="#dataset-overview" id="toc-dataset-overview"><span
+class="toc-section-number">7</span> Dataset Overview</a></li>
+<li><a href="#prediction-code-collapsed"
+id="toc-prediction-code-collapsed"><span
+class="toc-section-number">8</span> Prediction Code (Collapsed)</a></li>
+<li><a href="#sample-forecast-metrics"
+id="toc-sample-forecast-metrics"><span
+class="toc-section-number">9</span> Sample Forecast Metrics</a></li>
+<li><a href="#notes" id="toc-notes"><span
+class="toc-section-number">10</span> Notes</a></li>
+<li><a href="#forecast-method-summary-1"
+id="toc-forecast-method-summary-1"><span
+class="toc-section-number">11</span> Forecast Method Summary</a></li>
+</ul>
+</div>
 
-<div id="project-overview" class="section level2">
-<h2>Project Overview</h2>
-<p>This project uses CDC flu surveillance data to forecast influenza
-trends across the United States using <strong>interactive maps</strong>
-and <strong>predictive modeling</strong>.</p>
-<p>The dashboard is built using: - <strong>R Shiny</strong> for
-real-time interactivity - <strong>Leaflet</strong> for the U.S. heatmap
-visualization - <strong>Prophet</strong> for time-series forecasting -
-<strong>Dygraphs</strong> for smooth forecasting charts -
-<strong>ICL_NREVSS_Summary.csv</strong> as the primary data source</p>
+<div id="summary" class="section level2" number="1">
+<h2><span class="header-section-number">1</span> Summary</h2>
+<blockquote>
+<p><strong>What is this slide?</strong><br />
+This slide showcases a data-driven dashboard developed to forecast
+influenza activity across the United States. It leverages historical CDC
+surveillance data and applies a statistical time series forecasting
+model (Prophet) to project flu subtype trends one to five years into the
+future. The platform enables users to interact with a geospatial
+heatmap, select specific influenza subtypes, and visualize state-level
+forecasts with associated confidence intervals—supporting evidence-based
+public health planning and surveillance.</p>
+</blockquote>
+</div>
+<div id="project-overview" class="section level2" number="2">
+<h2><span class="header-section-number">2</span> Project Overview</h2>
+<p>This dashboard uses CDC flu surveillance data to forecast influenza
+trends across the United States. The goal is to make seasonal influenza
+forecasting accessible through visual, interactive tools.</p>
+<div id="technologies-used" class="section level3" number="2.1">
+<h3><span class="header-section-number">2.1</span> Technologies
+Used</h3>
+<ul>
+<li><strong>R Shiny</strong> for interactivity</li>
+<li><strong>Leaflet</strong> for U.S. heatmap visualizations</li>
+<li><strong>Prophet</strong> for time series forecasting</li>
+<li><strong>Dygraphs</strong> for forecast charts</li>
+<li><strong>ggplot2</strong> for bar chart comparisons</li>
+</ul>
 <hr />
 </div>
-<div id="explore-the-dashboard" class="section level2">
-<h2>Explore the Dashboard</h2>
-<p>Click the link below or interact with the embedded dashboard:</p>
-<p>🔗 <strong><a
-href="https://gare-warr01.shinyapps.io/flu_forecast_app/">Launch
+</div>
+<div id="explore-the-dashboard" class="section level2" number="3">
+<h2><span class="header-section-number">3</span> Explore the
+Dashboard</h2>
+<p><strong><a
+href="https://gare-warr01.shinyapps.io/flu_forecast_app/">Launch the
 Fullscreen Dashboard</a></strong></p>
+<p>You can also explore the embedded version below:</p>
 <iframe src="https://gare-warr01.shinyapps.io/flu_forecast_app/" width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc;">
 </iframe>
 <hr />
 </div>
-<div id="dashboard-features" class="section level2">
-<h2>Dashboard Features</h2>
+<div id="dashboard-features" class="section level2" number="4">
+<h2><span class="header-section-number">4</span> Dashboard Features</h2>
 <table>
 <colgroup>
-<col width="63%" />
-<col width="36%" />
+<col width="25%" />
+<col width="75%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -324,76 +377,169 @@ Fullscreen Dashboard</a></strong></p>
 </tr>
 <tr class="odd">
 <td>Subtype Selector</td>
-<td>Choose between subtypes like A_H1N1_2009, A_H3, B, BVic, etc.</td>
+<td>Choose between A_H1N1_2009, A_H3, B, BVic, etc.</td>
 </tr>
 <tr class="even">
 <td>State/National View</td>
-<td>Toggle between individual state or all-states (U.S.) view</td>
+<td>Toggle between individual state or national average overlay</td>
 </tr>
 <tr class="odd">
 <td>Model Accuracy</td>
-<td>Forecast includes confidence intervals from Prophet</td>
+<td>Forecast includes Prophet’s confidence intervals (upper/lower
+CI)</td>
 </tr>
 </tbody>
 </table>
 <hr />
 </div>
-<div id="how-the-forecast-works" class="section level2">
-<h2>How the Forecast Works</h2>
-<p>The app loads CDC subtype case data for each state and applies a
-machine learning model (<code>prophet</code>) to:</p>
+<div id="how-the-forecast-works" class="section level2" number="5">
+<h2><span class="header-section-number">5</span> How the Forecast
+Works</h2>
+<p>The app loads cleaned CDC data and uses Prophet to:</p>
 <ol style="list-style-type: decimal">
-<li><strong>Visualize past trends</strong><br />
+<li>Visualize past flu trends by subtype and location<br />
 </li>
-<li><strong>Forecast upcoming flu activity</strong><br />
+<li>Forecast future activity for 1 to 5 years<br />
 </li>
-<li><strong>Allow comparison between subtypes</strong></li>
+<li>Compare multiple subtypes with bar plots<br />
+</li>
+<li>Allow users to click on the heatmap to update predictions
+interactively</li>
 </ol>
-<p>In state mode, the <strong>heatmap</strong> and <strong>forecast
-plot</strong> sync together when a state is clicked.<br />
-In national mode, multiple subtypes can be viewed together in one
-graph.</p>
 <hr />
 </div>
-<div id="dataset-overview" class="section level2">
-<h2>Dataset Overview</h2>
-<p>Your input data file (<code>ICL_NREVSS_Summary.csv</code>)
-contains:</p>
+<div id="forecast-method-summary" class="section level2" number="6">
+<h2><span class="header-section-number">6</span> Forecast Method
+Summary</h2>
+<p>This dashboard uses a machine learning approach to model flu
+trends:</p>
+<ul>
+<li>Each state’s yearly case totals are modeled using the
+<strong>Prophet</strong> time series framework.</li>
+<li>Forecasts predict flu subtype cases <strong>1–5 years
+ahead</strong>.</li>
+<li>Uncertainty intervals are shown to reflect variability in
+predictions.</li>
+<li>Model performance metrics (MAE, RMSE) are included to gauge
+reliability.</li>
+</ul>
+</div>
+<div id="dataset-overview" class="section level2" number="7">
+<h2><span class="header-section-number">7</span> Dataset Overview</h2>
+<p>The dataset (<code>ICL_NREVSS_Summary.csv</code>) contains:</p>
 <ul>
 <li><code>State</code> — U.S. state name<br />
 </li>
 <li><code>Year</code> — Surveillance year<br />
 </li>
+<li><code>Total_Cases</code> — Sum of all subtyped influenza cases<br />
+</li>
 <li>Subtypes:
 <ul>
-<li>A_H1N1_2009<br />
-</li>
-<li>A_H3<br />
-</li>
-<li>A_Subtype_Not_Performed<br />
-</li>
-<li>B, BVic, BYam, H3N2v, A_H5<br />
-</li>
+<li>A_H1N1_2009, A_H3</li>
+<li>B, BVic, BYam</li>
+<li>H3N2v, A_H5</li>
+<li>A_Subtype_Not_Performed</li>
 </ul></li>
-<li><code>Total_Cases</code> — Total of all subtype cases</li>
 </ul>
 <hr />
 </div>
-<div id="sample-code-used-in-the-app" class="section level2">
-<h2>Sample Code Used in the App</h2>
-<p>```r # Load data and extract subtypes flu_data &lt;-
-read_csv(“ICL_NREVSS_Summary.csv”) subtype_columns &lt;-
-colnames(flu_data)[!(colnames(flu_data) %in% c(“State”, “Year”,
-“Total_Cases”))]</p>
+<div id="prediction-code-collapsed" class="section level2" number="8">
+<h2><span class="header-section-number">8</span> Prediction Code
+(Collapsed)</h2>
+<details>
+<summary>
+<strong>Click to view sample R code used for forecasting</strong>
+</summary>
+<pre class="r"><code># Load data and extract subtype columns
+flu_data &lt;- read_csv(&quot;ICL_NREVSS_Summary.csv&quot;)
+subtype_columns &lt;- colnames(flu_data)[!(colnames(flu_data) %in% c(&quot;State&quot;, &quot;Year&quot;, &quot;Total_Cases&quot;))]
+
+# Prophet forecast setup for a selected state and subtype
+selected_state &lt;- &quot;California&quot;
+input_subtype &lt;- &quot;A_H1N1_2009&quot;
+
+df &lt;- flu_data %&gt;%
+  filter(State == selected_state) %&gt;%
+  group_by(Year) %&gt;%
+  summarise(y = sum(get(input_subtype), na.rm = TRUE)) %&gt;%
+  mutate(ds = as.Date(paste0(Year, &quot;-01-01&quot;)))
+
+# Train the Prophet model
+m &lt;- prophet(df, yearly.seasonality = TRUE)
+
+# Forecast future cases (e.g., 5 years ahead)
+future &lt;- make_future_dataframe(m, periods = 5, freq = &quot;year&quot;)
+forecast &lt;- predict(m, future)</code></pre>
+</details>
+<hr />
 </div>
-<div id="forecast-setup" class="section level1">
-<h1>Forecast setup</h1>
-<p>df &lt;- flu_data %&gt;% filter(State == selected_state()) %&gt;%
-group_by(Year) %&gt;% summarise(y = sum(get(input$subtype), na.rm =
-TRUE)) %&gt;% mutate(ds = as.Date(paste0(Year, “-01-01”)))</p>
-<p>m &lt;- prophet(df, yearly.seasonality = TRUE) future &lt;-
-make_future_dataframe(m, periods = input$years, freq = “year”) forecast
-&lt;- predict(m, future)</p>
+<div id="sample-forecast-metrics" class="section level2" number="9">
+<h2><span class="header-section-number">9</span> Sample Forecast
+Metrics</h2>
+<table>
+<colgroup>
+<col width="21%" />
+<col width="54%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Description</th>
+<th>Value (Example)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MAE</td>
+<td>Mean Absolute Error of forecast</td>
+<td>4.8</td>
+</tr>
+<tr class="even">
+<td>RMSE</td>
+<td>Root Mean Square Error</td>
+<td>6.3</td>
+</tr>
+<tr class="odd">
+<td>Peak Year</td>
+<td>Year of maximum predicted cases</td>
+<td>2026</td>
+</tr>
+<tr class="even">
+<td>Trend</td>
+<td>Whether the trend is rising or falling</td>
+<td>Increasing</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="notes" class="section level2" number="10">
+<h2><span class="header-section-number">10</span> Notes</h2>
+<ul>
+<li>Forecast reliability depends on consistent historical reporting</li>
+<li>The Prophet model includes additive seasonal components and CI
+bands</li>
+<li>Data updates will improve future model accuracy</li>
+</ul>
+<hr />
+</div>
+<div id="forecast-method-summary-1" class="section level2" number="11">
+<h2><span class="header-section-number">11</span> Forecast Method
+Summary</h2>
+<p>This dashboard demonstrates real-time forecasting of flu case data
+by:</p>
+<ul>
+<li>Using <code>prophet()</code> to model historical yearly flu
+counts</li>
+<li>Predicting values using <code>predict()</code> across user-defined
+future periods</li>
+<li>Visualizing outcomes via <code>dygraphs</code>, with optional
+confidence intervals and national averages</li>
+</ul>
+<p>This is a forecasting tool designed to highlight annual trends,
+regional outbreaks, and potential flu burden through statistical
+modeling and visualization.</p>
 </div>
 
 

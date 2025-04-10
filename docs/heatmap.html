@@ -238,7 +238,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Flu Dashboard</a>
+      <a class="navbar-brand" href="index.html">Tracking 20 Years of U.S. Flu Outbreaks</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -276,60 +276,182 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#what-this-dashboard-shows"
+id="toc-what-this-dashboard-shows">What This Dashboard Shows</a></li>
+<li><a href="#live-app" id="toc-live-app">Live App</a></li>
+<li><a href="#view-the-full-r-code-click-to-expand"
+id="toc-view-the-full-r-code-click-to-expand">View the Full R Code
+(Click to Expand)</a></li>
+<li><a href="#data-source" id="toc-data-source">Data Source</a></li>
+</ul>
+</div>
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>This dashboard presents an <strong>interactive heatmap of influenza
-cases across U.S. states</strong>, using publicly available data from
-the CDC NREVSS dataset (<code>ICL_NREVSS_Summary.csv</code>).</p>
+<p>This interactive dashboard visualizes laboratory-confirmed influenza
+cases across U.S. states, using public data from the CDC’s NREVSS
+program. It allows users to:</p>
 <ul>
-<li>The map is interactive and color-coded by the <strong>total number
-of flu cases per state</strong>.</li>
-<li>You can select a <strong>year from the dropdown</strong> to
-visualize how flu cases varied across time.</li>
-<li>The app is built in <strong>R using Shiny and Leaflet</strong>, and
-hosted on <a href="https://www.shinyapps.io">shinyapps.io</a>.</li>
+<li>Select from multiple flu strains (e.g., H1N1, H3, B/Victoria,
+etc.)</li>
+<li>Choose a specific year to analyze</li>
+<li>View:
+<ul>
+<li>A dynamic heatmap with case counts per state</li>
+<li>A Top 5 leaderboard of the most affected states</li>
+<li>A real-time summary of total cases</li>
+</ul></li>
 </ul>
+<p>The app was developed in R with Shiny and hosted via <a
+href="https://gare-warr01.shinyapps.io/flu_heatmap_app/">shinyapps.io</a>.</p>
+<hr />
 </div>
-<div id="live-interactive-map" class="section level2">
-<h2>Live Interactive Map</h2>
+<div id="what-this-dashboard-shows" class="section level2">
+<h2>What This Dashboard Shows</h2>
+<ul>
+<li><strong>Interactive Map</strong>: States are color-coded based on
+the number of flu cases for the selected strain and year.</li>
+<li><strong>Strain Selector</strong>: Focus on one strain at a time
+(e.g., H3N2, B/Yamagata).</li>
+<li><strong>Year Selector</strong>: Use the year slider to explore
+annual trends.</li>
+<li><strong>Top 5 States</strong>: Sidebar leaderboard shows the
+highest-case states for quick comparison.</li>
+<li><strong>Popups</strong>: Hover or click on circles to see
+state-specific counts.</li>
+</ul>
+<hr />
+</div>
+<div id="live-app" class="section level2">
+<h2>Live App</h2>
 <iframe src="https://gare-warr01.shinyapps.io/flu_heatmap_app/" width="100%" height="700px" frameborder="0" style="border: none;">
 </iframe>
 <hr />
 </div>
-<div id="how-it-was-built" class="section level2">
-<h2>How It Was Built</h2>
-<p>Below is the full code used to create the Shiny app:</p>
-<p>```r library(shiny) library(leaflet) library(dplyr)
-library(readr)</p>
-<p>flu_data &lt;- read.csv(“ICL_NREVSS_Summary.csv”) state_centers &lt;-
-data.frame(state.center, State = state.name)</p>
-<p>ui &lt;- fluidPage( titlePanel(“Flu Case Heatmap by Year”),
-sidebarLayout( sidebarPanel( selectInput(“year”, “Select Year”, choices
-= sort(unique(flu_data$Year)), selected = 2023) ), mainPanel(
-leafletOutput(“fluMap”, height = “600px”) ) ) )</p>
-<p>server &lt;- function(input, output, session) { output<span
-class="math inline">\(fluMap &lt;- renderLeaflet({
-    yearly_flu &lt;- flu_data %&gt;%
-      filter(Year == input\)</span>year) %&gt;% group_by(State) %&gt;%
-summarise(Total_Cases = sum(Total_Cases, na.rm = TRUE)) %&gt;%
-left_join(state_centers, by = “State”)</p>
-<pre><code>pal &lt;- colorNumeric(&quot;YlOrRd&quot;, domain = yearly_flu$Total_Cases)
+<div id="view-the-full-r-code-click-to-expand" class="section level2">
+<h2>View the Full R Code (Click to Expand)</h2>
+<details>
+<summary>
+<strong>Click here to view the full R Shiny app code</strong>
+</summary>
+<pre class="r"><code>library(shiny)
+library(leaflet)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(bslib)
+library(shinycssloaders)
+library(ggplot2)
+library(plotly)
+library(DT)
 
-leaflet(yearly_flu) %&gt;%
-  addProviderTiles(providers$CartoDB.Positron) %&gt;%
-  setView(lng = -98.583, lat = 39.833, zoom = 4) %&gt;%
-  addCircleMarkers(
-    lng = ~x, lat = ~y,
-    radius = ~sqrt(Total_Cases) / 2,
-    color = ~pal(Total_Cases),
-    stroke = FALSE, fillOpacity = 0.8,
-    popup = ~paste0(&quot;&lt;b&gt;&quot;, State, &quot;&lt;/b&gt;&lt;br&gt;Total Cases: &quot;, Total_Cases)
-  ) %&gt;%
-  addLegend(&quot;bottomright&quot;, pal = pal, values = ~Total_Cases,
-            title = paste(&quot;Total Cases in&quot;, input$year))</code></pre>
-<p>}) }</p>
-<p>shinyApp(ui, server)</p>
+long_flu_data &lt;- read.csv(&quot;ICL_NREVSS_LongFormat.csv&quot;)
+state_centers &lt;- data.frame(state.center, State = state.name)
+
+strain_labels &lt;- c(
+  &quot;A_H1N1_2009&quot; = &quot;H1N1&quot;,
+  &quot;A_H3&quot; = &quot;H3&quot;,
+  &quot;A_Subtype_Not_Performed&quot; = &quot;A (Unsubtyped)&quot;,
+  &quot;B&quot; = &quot;Influenza B (Total)&quot;,
+  &quot;BVic&quot; = &quot;B/Victoria&quot;,
+  &quot;BYam&quot; = &quot;B/Yamagata&quot;,
+  &quot;H3N2v&quot; = &quot;H3N2v (Variant)&quot;,
+  &quot;A_H5&quot; = &quot;H5 (Avian)&quot;
+)
+
+long_flu_data$Strain_Label &lt;- strain_labels[long_flu_data$Strain]
+
+ui &lt;- fluidPage(
+  theme = bs_theme(version = 5, bootswatch = &quot;flatly&quot;),
+  tags$div(style = &quot;padding: 15px;&quot;,
+    titlePanel(&quot;Flu Case Heatmap by Strain &amp; Year&quot;),
+    sidebarLayout(
+      sidebarPanel(
+        helpText(&quot;Visualize flu case totals by strain and state for each year.&quot;),
+        selectInput(&quot;strain&quot;, &quot;Select Flu Strain&quot;, choices = unique(long_flu_data$Strain_Label),
+                    selected = unique(long_flu_data$Strain_Label)[1]),
+        sliderInput(&quot;year&quot;, &quot;Select Year&quot;, min = min(long_flu_data$Year), max = max(long_flu_data$Year),
+                    value = max(long_flu_data$Year), step = 1, animate = animationOptions(interval = 1500, loop = TRUE)),
+        textOutput(&quot;totalCasesText&quot;),
+        br(),
+        h5(&quot;Top 5 States&quot;),
+        DTOutput(&quot;topStates&quot;)
+      ),
+      mainPanel(
+        withSpinner(leafletOutput(&quot;fluMap&quot;, height = &quot;600px&quot;)),
+        tags$div(style = &quot;text-align: right; font-size: 12px; color: gray; margin-top: 10px;&quot;,
+                 &quot;Data source: ICL NREVSS | Map powered by Leaflet &amp; Shiny&quot;)
+      )
+    )
+  )
+)
+
+server &lt;- function(input, output, session) {
+  selected_strain &lt;- reactive({
+    names(strain_labels)[which(strain_labels == input$strain)]
+  })
+  
+  filtered_data &lt;- reactive({
+    long_flu_data %&gt;%
+      filter(Year == input$year, Strain == selected_strain())
+  })
+
+  output$fluMap &lt;- renderLeaflet({
+    yearly_flu &lt;- filtered_data() %&gt;%
+      group_by(State) %&gt;%
+      summarise(Total_Cases = sum(Cases, na.rm = TRUE)) %&gt;%
+      left_join(state_centers, by = &quot;State&quot;)
+    
+    pal &lt;- colorNumeric(&quot;YlOrRd&quot;, domain = yearly_flu$Total_Cases)
+
+    leaflet(yearly_flu) %&gt;%
+      addProviderTiles(providers$CartoDB.Positron) %&gt;%
+      setView(lng = -98.583, lat = 39.833, zoom = 4) %&gt;%
+      addCircleMarkers(
+        lng = ~x, lat = ~y,
+        radius = ~sqrt(Total_Cases) / 2,
+        color = ~pal(Total_Cases),
+        stroke = FALSE, fillOpacity = 0.8,
+        popup = ~paste(
+          &quot;&lt;strong&gt;State:&lt;/strong&gt;&quot;, State, &quot;&lt;br/&gt;&quot;,
+          &quot;&lt;strong&gt;Total Cases:&lt;/strong&gt;&quot;, format(Total_Cases, big.mark = &quot;,&quot;)
+        )
+      ) %&gt;%
+      addLegend(&quot;bottomright&quot;, pal = pal, values = ~Total_Cases,
+                title = paste(&quot;Total Cases in&quot;, input$year))
+  })
+
+  output$totalCasesText &lt;- renderText({
+    total &lt;- sum(filtered_data()$Cases, na.rm = TRUE)
+    paste(&quot;Total&quot;, input$strain, &quot;Cases:&quot;, format(total, big.mark = &quot;,&quot;))
+  })
+
+  output$topStates &lt;- renderDT({
+    filtered_data() %&gt;%
+      group_by(State) %&gt;%
+      summarise(Cases = sum(Cases, na.rm = TRUE)) %&gt;%
+      arrange(desc(Cases)) %&gt;%
+      slice_head(n = 5) %&gt;%
+      mutate(Rank = row_number()) %&gt;%
+      dplyr::select(Rank, State, Cases)
+  }, options = list(dom = &#39;t&#39;, pageLength = 5), rownames = FALSE)
+}
+
+shinyApp(ui, server)</code></pre>
+</details>
+<hr />
+</div>
+<div id="data-source" class="section level2">
+<h2>Data Source</h2>
+<ul>
+<li>CDC NREVSS: <a href="https://www.cdc.gov/surveillance/nrevss/"
+class="uri">https://www.cdc.gov/surveillance/nrevss/</a></li>
+<li>Dataset: <code>ICL_NREVSS_Summary.csv</code>, reshaped using
+<code>tidyr::pivot_longer()</code></li>
+</ul>
 </div>
 
 

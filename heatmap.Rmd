@@ -1,17 +1,37 @@
+
 ---
 title: "Interactive Flu Heatmap by Year"
-output: html_document
+output: 
+  html_document:
+    theme: flatly
 ---
 
 ## Overview
 
-This dashboard presents an **interactive heatmap of influenza cases across U.S. states**, using publicly available data from the CDC NREVSS dataset (`ICL_NREVSS_Summary.csv`).
+This interactive dashboard visualizes laboratory-confirmed influenza cases across U.S. states, using public data from the CDC's NREVSS program. It allows users to:
 
-- The map is interactive and color-coded by the **total number of flu cases per state**.
-- You can select a **year from the dropdown** to visualize how flu cases varied across time.
-- The app is built in **R using Shiny and Leaflet**, and hosted on [shinyapps.io](https://www.shinyapps.io).
+- Select from multiple flu strains (e.g., H1N1, H3, B/Victoria, etc.)
+- Choose a specific year to analyze
+- View:
+  - A dynamic heatmap with case counts per state
+  - A Top 5 leaderboard of the most affected states
+  - A real-time summary of total cases
 
-## Live Interactive Map
+The app was developed in R with Shiny and hosted via [shinyapps.io](https://gare-warr01.shinyapps.io/flu_heatmap_app/).
+
+---
+
+## What This Dashboard Shows
+
+- **Interactive Map**: States are color-coded based on the number of flu cases for the selected strain and year.
+- **Strain Selector**: Focus on one strain at a time (e.g., H3N2, B/Yamagata).
+- **Year Selector**: Use the year slider to explore annual trends.
+- **Top 5 States**: Sidebar leaderboard shows the highest-case states for quick comparison.
+- **Popups**: Hover or click on circles to see state-specific counts.
+
+---
+
+## Live App
 
 <iframe src="https://gare-warr01.shinyapps.io/flu_heatmap_app/"
         width="100%" height="700px" frameborder="0" style="border: none;">
@@ -19,39 +39,80 @@ This dashboard presents an **interactive heatmap of influenza cases across U.S. 
 
 ---
 
-## How It Was Built
+## View the Full R Code (Click to Expand)
 
-Below is the full code used to create the Shiny app:
+<details>
+<summary><strong>Click here to view the full R Shiny app code</strong></summary>
 
 ```r
 library(shiny)
 library(leaflet)
 library(dplyr)
 library(readr)
+library(tidyr)
+library(bslib)
+library(shinycssloaders)
+library(ggplot2)
+library(plotly)
+library(DT)
 
-flu_data <- read.csv("ICL_NREVSS_Summary.csv")
+long_flu_data <- read.csv("ICL_NREVSS_LongFormat.csv")
 state_centers <- data.frame(state.center, State = state.name)
 
+strain_labels <- c(
+  "A_H1N1_2009" = "H1N1",
+  "A_H3" = "H3",
+  "A_Subtype_Not_Performed" = "A (Unsubtyped)",
+  "B" = "Influenza B (Total)",
+  "BVic" = "B/Victoria",
+  "BYam" = "B/Yamagata",
+  "H3N2v" = "H3N2v (Variant)",
+  "A_H5" = "H5 (Avian)"
+)
+
+long_flu_data$Strain_Label <- strain_labels[long_flu_data$Strain]
+
 ui <- fluidPage(
-  titlePanel("Flu Case Heatmap by Year"),
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("year", "Select Year", choices = sort(unique(flu_data$Year)), selected = 2023)
-    ),
-    mainPanel(
-      leafletOutput("fluMap", height = "600px")
+  theme = bs_theme(version = 5, bootswatch = "flatly"),
+  tags$div(style = "padding: 15px;",
+    titlePanel("Flu Case Heatmap by Strain & Year"),
+    sidebarLayout(
+      sidebarPanel(
+        helpText("Visualize flu case totals by strain and state for each year."),
+        selectInput("strain", "Select Flu Strain", choices = unique(long_flu_data$Strain_Label),
+                    selected = unique(long_flu_data$Strain_Label)[1]),
+        sliderInput("year", "Select Year", min = min(long_flu_data$Year), max = max(long_flu_data$Year),
+                    value = max(long_flu_data$Year), step = 1, animate = animationOptions(interval = 1500, loop = TRUE)),
+        textOutput("totalCasesText"),
+        br(),
+        h5("Top 5 States"),
+        DTOutput("topStates")
+      ),
+      mainPanel(
+        withSpinner(leafletOutput("fluMap", height = "600px")),
+        tags$div(style = "text-align: right; font-size: 12px; color: gray; margin-top: 10px;",
+                 "Data source: ICL NREVSS | Map powered by Leaflet & Shiny")
+      )
     )
   )
 )
 
 server <- function(input, output, session) {
-  output$fluMap <- renderLeaflet({
-    yearly_flu <- flu_data %>%
-      filter(Year == input$year) %>%
-      group_by(State) %>%
-      summarise(Total_Cases = sum(Total_Cases, na.rm = TRUE)) %>%
-      left_join(state_centers, by = "State")
+  selected_strain <- reactive({
+    names(strain_labels)[which(strain_labels == input$strain)]
+  })
+  
+  filtered_data <- reactive({
+    long_flu_data %>%
+      filter(Year == input$year, Strain == selected_strain())
+  })
 
+  output$fluMap <- renderLeaflet({
+    yearly_flu <- filtered_data() %>%
+      group_by(State) %>%
+      summarise(Total_Cases = sum(Cases, na.rm = TRUE)) %>%
+      left_join(state_centers, by = "State")
+    
     pal <- colorNumeric("YlOrRd", domain = yearly_flu$Total_Cases)
 
     leaflet(yearly_flu) %>%
@@ -62,11 +123,39 @@ server <- function(input, output, session) {
         radius = ~sqrt(Total_Cases) / 2,
         color = ~pal(Total_Cases),
         stroke = FALSE, fillOpacity = 0.8,
-        popup = ~paste0("<b>", State, "</b><br>Total Cases: ", Total_Cases)
+        popup = ~paste(
+          "<strong>State:</strong>", State, "<br/>",
+          "<strong>Total Cases:</strong>", format(Total_Cases, big.mark = ",")
+        )
       ) %>%
       addLegend("bottomright", pal = pal, values = ~Total_Cases,
                 title = paste("Total Cases in", input$year))
   })
+
+  output$totalCasesText <- renderText({
+    total <- sum(filtered_data()$Cases, na.rm = TRUE)
+    paste("Total", input$strain, "Cases:", format(total, big.mark = ","))
+  })
+
+  output$topStates <- renderDT({
+    filtered_data() %>%
+      group_by(State) %>%
+      summarise(Cases = sum(Cases, na.rm = TRUE)) %>%
+      arrange(desc(Cases)) %>%
+      slice_head(n = 5) %>%
+      mutate(Rank = row_number()) %>%
+      dplyr::select(Rank, State, Cases)
+  }, options = list(dom = 't', pageLength = 5), rownames = FALSE)
 }
 
 shinyApp(ui, server)
+```
+
+</details>
+
+---
+
+## Data Source
+
+- CDC NREVSS: https://www.cdc.gov/surveillance/nrevss/
+- Dataset: `ICL_NREVSS_Summary.csv`, reshaped using `tidyr::pivot_longer()`

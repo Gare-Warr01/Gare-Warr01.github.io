@@ -1,87 +1,145 @@
 ---
 title: "Flu Forecast & Interactive Heatmap Dashboard"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    theme: flatly
+    number_sections: true
 ---
+
+## Summary
+
+> **What is this slide?**  
+> This slide showcases a data-driven dashboard developed to forecast influenza activity across the United States. It leverages historical CDC surveillance data and applies a statistical time series forecasting model (Prophet) to project flu subtype trends one to five years into the future. The platform enables users to interact with a geospatial heatmap, select specific influenza subtypes, and visualize state-level forecasts with associated confidence intervals—supporting evidence-based public health planning and surveillance.
 
 ## Project Overview
 
-This project uses CDC flu surveillance data to forecast influenza trends across the United States using **interactive maps** and **predictive modeling**.
+This dashboard uses CDC flu surveillance data to forecast influenza trends across the United States. The goal is to make seasonal influenza forecasting accessible through visual, interactive tools.
 
-The dashboard is built using:
-- **R Shiny** for real-time interactivity
-- **Leaflet** for the U.S. heatmap visualization
-- **Prophet** for time-series forecasting
-- **Dygraphs** for smooth forecasting charts
-- **ICL_NREVSS_Summary.csv** as the primary data source
+### Technologies Used
+
+- **R Shiny** for interactivity
+- **Leaflet** for U.S. heatmap visualizations
+- **Prophet** for time series forecasting
+- **Dygraphs** for forecast charts
+- **ggplot2** for bar chart comparisons
 
 ---
 
 ## Explore the Dashboard
 
-Click the link below or interact with the embedded dashboard:
+**[Launch the Fullscreen Dashboard](https://gare-warr01.shinyapps.io/flu_forecast_app/)**
 
-🔗 **[Launch Fullscreen Dashboard](https://gare-warr01.shinyapps.io/flu_forecast_app/)**
+You can also explore the embedded version below:
 
 <iframe src="https://gare-warr01.shinyapps.io/flu_forecast_app/"
-        width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc;">
-</iframe>
+        width="100%" height="700px" frameborder="0" style="border: 1px solid #ccc;"></iframe>
 
 ---
 
 ## Dashboard Features
 
-| Feature               | Description |
-|-----------------------|-------------|
-| Heatmap by State   | Explore flu subtype intensity per U.S. state by year |
-| Forecasting Tool   | Predict flu cases by subtype for the next 1–5 years |
-| Subtype Selector   | Choose between subtypes like A_H1N1_2009, A_H3, B, BVic, etc. |
-| State/National View | Toggle between individual state or all-states (U.S.) view |
-| Model Accuracy     | Forecast includes confidence intervals from Prophet |
+| Feature               | Description                                                         |
+|-----------------------|---------------------------------------------------------------------|
+| Heatmap by State      | Explore flu subtype intensity per U.S. state by year               |
+| Forecasting Tool      | Predict flu cases by subtype for the next 1–5 years                |
+| Subtype Selector      | Choose between A_H1N1_2009, A_H3, B, BVic, etc.                    |
+| State/National View   | Toggle between individual state or national average overlay        |
+| Model Accuracy        | Forecast includes Prophet's confidence intervals (upper/lower CI)  |
 
 ---
 
 ## How the Forecast Works
 
-The app loads CDC subtype case data for each state and applies a machine learning model (`prophet`) to:
+The app loads cleaned CDC data and uses Prophet to:
 
-1. **Visualize past trends**  
-2. **Forecast upcoming flu activity**  
-3. **Allow comparison between subtypes**
-
-In state mode, the **heatmap** and **forecast plot** sync together when a state is clicked.  
-In national mode, multiple subtypes can be viewed together in one graph.
+1. Visualize past flu trends by subtype and location  
+2. Forecast future activity for 1 to 5 years  
+3. Compare multiple subtypes with bar plots  
+4. Allow users to click on the heatmap to update predictions interactively
 
 ---
+
+## Forecast Method Summary
+
+This dashboard uses a machine learning approach to model flu trends:
+
+- Each state's yearly case totals are modeled using the **Prophet** time series framework.
+- Forecasts predict flu subtype cases **1–5 years ahead**.
+- Uncertainty intervals are shown to reflect variability in predictions.
+- Model performance metrics (MAE, RMSE) are included to gauge reliability.
 
 ## Dataset Overview
 
-Your input data file (`ICL_NREVSS_Summary.csv`) contains:
+The dataset (`ICL_NREVSS_Summary.csv`) contains:
 
 - `State` — U.S. state name  
 - `Year` — Surveillance year  
-- Subtypes:  
-  - A_H1N1_2009  
-  - A_H3  
-  - A_Subtype_Not_Performed  
-  - B, BVic, BYam, H3N2v, A_H5  
-- `Total_Cases` — Total of all subtype cases
+- `Total_Cases` — Sum of all subtyped influenza cases  
+- Subtypes:
+  - A_H1N1_2009, A_H3
+  - B, BVic, BYam
+  - H3N2v, A_H5
+  - A_Subtype_Not_Performed
 
 ---
 
-## Sample Code Used in the App
+## Prediction Code (Collapsed)
+
+<details>
+<summary><strong>Click to view sample R code used for forecasting</strong></summary>
 
 ```r
-# Load data and extract subtypes
+# Load data and extract subtype columns
 flu_data <- read_csv("ICL_NREVSS_Summary.csv")
 subtype_columns <- colnames(flu_data)[!(colnames(flu_data) %in% c("State", "Year", "Total_Cases"))]
 
-# Forecast setup
+# Prophet forecast setup for a selected state and subtype
+selected_state <- "California"
+input_subtype <- "A_H1N1_2009"
+
 df <- flu_data %>%
-  filter(State == selected_state()) %>%
+  filter(State == selected_state) %>%
   group_by(Year) %>%
-  summarise(y = sum(get(input$subtype), na.rm = TRUE)) %>%
+  summarise(y = sum(get(input_subtype), na.rm = TRUE)) %>%
   mutate(ds = as.Date(paste0(Year, "-01-01")))
 
+# Train the Prophet model
 m <- prophet(df, yearly.seasonality = TRUE)
-future <- make_future_dataframe(m, periods = input$years, freq = "year")
+
+# Forecast future cases (e.g., 5 years ahead)
+future <- make_future_dataframe(m, periods = 5, freq = "year")
 forecast <- predict(m, future)
+```
+
+</details>
+
+---
+
+## Sample Forecast Metrics
+
+| Metric        | Description                           | Value (Example) |
+|---------------|---------------------------------------|-----------------|
+| MAE           | Mean Absolute Error of forecast       | 4.8             |
+| RMSE          | Root Mean Square Error                | 6.3             |
+| Peak Year     | Year of maximum predicted cases       | 2026            |
+| Trend         | Whether the trend is rising or falling| Increasing      |
+
+## Notes
+
+- Forecast reliability depends on consistent historical reporting
+- The Prophet model includes additive seasonal components and CI bands
+- Data updates will improve future model accuracy
+
+---
+
+## Forecast Method Summary
+
+This dashboard demonstrates real-time forecasting of flu case data by:
+
+- Using `prophet()` to model historical yearly flu counts
+- Predicting values using `predict()` across user-defined future periods
+- Visualizing outcomes via `dygraphs`, with optional confidence intervals and national averages
+
+This is a forecasting tool designed to highlight annual trends, regional outbreaks, and potential flu burden through statistical modeling and visualization.
