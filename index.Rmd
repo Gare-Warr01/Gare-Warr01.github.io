@@ -4,7 +4,7 @@ output:
   html_document:
     toc: true
     toc_depth: 2
-    theme: flatly
+    theme: journal
     includes:
       in_header: favicon.html
 ---
@@ -13,7 +13,24 @@ output:
 
 > *“Influenza doesn't just return each season—it evolves. Tracking it is not just science, it's strategy.”*
 
-Welcome to the **U.S. Influenza Forecasting Hub**, an interactive data science project that analyzes over two decades of CDC flu surveillance data to uncover patterns—and predict the future.
+## Abstract
+
+This project explores 23 years of U.S. influenza surveillance data (2000–2023) to identify trends in seasonal outbreaks, track the evolution of viral subtypes, and predict future flu activity using machine learning. Through time series analysis, geospatial visualization, and interactive forecasting tools, this capstone aims to inform public health strategy and improve epidemic preparedness.
+
+The **U.S. Influenza Forecasting Hub** is an interactive data science platform developed as part of a capstone project at Utah Valley University. It presents over two decades of influenza data to support forecasting, visualization, and public health insights.
+
+---
+
+## Why This Matters
+
+Influenza surveillance is crucial for:
+
+- **Tracking Outbreaks** – Monitoring the rise and fall of seasonal flu cases  
+- **Strain Prediction** – Anticipating dominant viral types like H1N1, H3N2, and B/Yamagata  
+- **Public Health Strategy** – Informing vaccine formulation and emergency planning  
+- **Awareness & Education** – Highlighting both seasonal and pandemic-level threats  
+
+By learning from past flu seasons, we can better prepare for what’s ahead.
 
 ---
 
@@ -29,43 +46,40 @@ This site explores that question by blending time series data, geospatial mappin
 
 Built as a capstone for the **UVU Data Science program**, this website demonstrates:
 
-- Data wrangling & cleaning (tidyverse, lubridate)  
-- Interactive visualizations (Plotly, Leaflet, Shiny)  
-- Forecasting models (Prophet)  
-- Deployment via R Markdown & GitHub Pages  
+- **Data Wrangling & Cleaning** – via tidyverse, lubridate  
+- **Interactive Visualization** – using Plotly, Leaflet, Shiny  
+- **Time Series Forecasting** – with Prophet  
+- **Web Deployment** – through R Markdown and GitHub Pages  
 
 The goal is to present flu surveillance data in an intuitive, accessible, and predictive format—bridging science, public health, and storytelling.
 
 ---
 
-## Why This Matters
-
-Influenza surveillance is crucial for:
-
-- Tracking the rise and fall of seasonal outbreaks  
-- Anticipating dominant viral strains (H1N1, H3N2, B/Yamagata, etc.)  
-- Informing public health policy and vaccine development  
-- Raising awareness of seasonal and pandemic-level threats  
-
-By learning from past flu seasons, we can better prepare for what’s ahead.
-
----
-
 ## What You’ll Find
 
-- Outbreak Insights — Weekly case trends and viral subtype distributions  
-- Flu Forecasting — Machine learning models predict next season’s behavior  
-- Heatmaps — Geographic flu spread across U.S. regions  
-- Raw Data — Download the original dataset for your own analysis  
-- About the Author — Learn about the creator and project story  
+- **Outbreak Insights** – Weekly case trends and viral subtype distributions
+- **Heatmaps** – Geographic flu spread across U.S. regions  
+- **Flu Forecasting** – Machine learning models predict next season’s behavior  
+- **Raw Data** – Download the original dataset for your own analysis  
+- **About the Author** – Learn about the creator and project story  
 
 ---
 
 ## Data Summary
 
-- Years Covered: 2000–2023  
-- Tested Samples: 10+ million  
-- Key Metrics: ILI (Influenza-like Illness), % Positive, Strain Proportions  
+- **Years Covered:** 2000–2023  
+- **Tested Samples:** 10+ million  
+- **Key Metrics:** ILI (Influenza-like Illness), % Positive, Strain Proportions  
+
+---
+
+## Limitations & Future Work
+
+This analysis depends on CDC-reported surveillance data, which may underreport mild or untested flu cases. Future improvements could include:
+
+- Incorporating hospitalization and mortality data  
+- Real-time updates using live CDC APIs  
+- Regional predictive models integrating local climate factors  
 
 ---
 
@@ -77,7 +91,7 @@ All data sourced from the **CDC FluView Interactive Portal**:
 ---
 
 <div style="width: 100%; overflow: hidden; margin-top: 40px;">
-  <img src="banner.png" alt="Flu Tracker Banner"
+  <img src="banner.png" alt="Illustrated header showing flu virus structure and trend line graph with the words 'Flu Tracker – Forecasting the Fight'"
        style="width: 100%; max-height: 180px; object-fit: contain; display: block; margin: 0 auto;">
 </div>
 
@@ -92,3 +106,5 @@ All data sourced from the **CDC FluView Interactive Portal**:
     Last Updated: April 2025
   </p>
 </footer>
+
+

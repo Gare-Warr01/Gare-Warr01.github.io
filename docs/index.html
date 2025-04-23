@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -283,15 +283,18 @@ $(document).ready(function () {
 id="toc-u.s.-influenza-trends-forecasting-20002023">U.S. Influenza
 Trends &amp; Forecasting (2000–2023)</a>
 <ul>
+<li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+<li><a href="#why-this-matters" id="toc-why-this-matters">Why This
+Matters</a></li>
 <li><a href="#research-question" id="toc-research-question">Research
 Question</a></li>
 <li><a href="#project-purpose" id="toc-project-purpose">Project
 Purpose</a></li>
-<li><a href="#why-this-matters" id="toc-why-this-matters">Why This
-Matters</a></li>
 <li><a href="#what-youll-find" id="toc-what-youll-find">What You’ll
 Find</a></li>
 <li><a href="#data-summary" id="toc-data-summary">Data Summary</a></li>
+<li><a href="#limitations-future-work"
+id="toc-limitations-future-work">Limitations &amp; Future Work</a></li>
 <li><a href="#data-source" id="toc-data-source">Data Source</a></li>
 </ul></li>
 </ul>
@@ -304,10 +307,40 @@ class="section level1">
 <p><em>“Influenza doesn’t just return each season—it evolves. Tracking
 it is not just science, it’s strategy.”</em></p>
 </blockquote>
-<p>Welcome to the <strong>U.S. Influenza Forecasting Hub</strong>, an
-interactive data science project that analyzes over two decades of CDC
-flu surveillance data to uncover patterns—and predict the future.</p>
+<div id="abstract" class="section level2">
+<h2>Abstract</h2>
+<p>This project explores 23 years of U.S. influenza surveillance data
+(2000–2023) to identify trends in seasonal outbreaks, track the
+evolution of viral subtypes, and predict future flu activity using
+machine learning. Through time series analysis, geospatial
+visualization, and interactive forecasting tools, this capstone aims to
+inform public health strategy and improve epidemic preparedness.</p>
+<p>The <strong>U.S. Influenza Forecasting Hub</strong> is an interactive
+data science platform developed as part of a capstone project at Utah
+Valley University. It presents over two decades of influenza data to
+support forecasting, visualization, and public health insights.</p>
 <hr />
+</div>
+<div id="why-this-matters" class="section level2">
+<h2>Why This Matters</h2>
+<p>Influenza surveillance is crucial for:</p>
+<ul>
+<li><strong>Tracking Outbreaks</strong> – Monitoring the rise and fall
+of seasonal flu cases<br />
+</li>
+<li><strong>Strain Prediction</strong> – Anticipating dominant viral
+types like H1N1, H3N2, and B/Yamagata<br />
+</li>
+<li><strong>Public Health Strategy</strong> – Informing vaccine
+formulation and emergency planning<br />
+</li>
+<li><strong>Awareness &amp; Education</strong> – Highlighting both
+seasonal and pandemic-level threats</li>
+</ul>
+<p>By learning from past flu seasons, we can better prepare for what’s
+ahead.</p>
+<hr />
+</div>
 <div id="research-question" class="section level2">
 <h2>Research Question</h2>
 <p><strong>How can historical flu trends and subtype patterns be used to
@@ -322,62 +355,64 @@ geospatial mapping, and machine learning-powered forecasting.</p>
 <p>Built as a capstone for the <strong>UVU Data Science
 program</strong>, this website demonstrates:</p>
 <ul>
-<li>Data wrangling &amp; cleaning (tidyverse, lubridate)<br />
+<li><strong>Data Wrangling &amp; Cleaning</strong> – via tidyverse,
+lubridate<br />
 </li>
-<li>Interactive visualizations (Plotly, Leaflet, Shiny)<br />
+<li><strong>Interactive Visualization</strong> – using Plotly, Leaflet,
+Shiny<br />
 </li>
-<li>Forecasting models (Prophet)<br />
+<li><strong>Time Series Forecasting</strong> – with Prophet<br />
 </li>
-<li>Deployment via R Markdown &amp; GitHub Pages</li>
+<li><strong>Web Deployment</strong> – through R Markdown and GitHub
+Pages</li>
 </ul>
 <p>The goal is to present flu surveillance data in an intuitive,
 accessible, and predictive format—bridging science, public health, and
 storytelling.</p>
 <hr />
 </div>
-<div id="why-this-matters" class="section level2">
-<h2>Why This Matters</h2>
-<p>Influenza surveillance is crucial for:</p>
-<ul>
-<li>Tracking the rise and fall of seasonal outbreaks<br />
-</li>
-<li>Anticipating dominant viral strains (H1N1, H3N2, B/Yamagata,
-etc.)<br />
-</li>
-<li>Informing public health policy and vaccine development<br />
-</li>
-<li>Raising awareness of seasonal and pandemic-level threats</li>
-</ul>
-<p>By learning from past flu seasons, we can better prepare for what’s
-ahead.</p>
-<hr />
-</div>
 <div id="what-youll-find" class="section level2">
 <h2>What You’ll Find</h2>
 <ul>
-<li>Outbreak Insights — Weekly case trends and viral subtype
-distributions<br />
+<li><strong>Outbreak Insights</strong> – Weekly case trends and viral
+subtype distributions</li>
+<li><strong>Heatmaps</strong> – Geographic flu spread across U.S.
+regions<br />
 </li>
-<li>Flu Forecasting — Machine learning models predict next season’s
-behavior<br />
+<li><strong>Flu Forecasting</strong> – Machine learning models predict
+next season’s behavior<br />
 </li>
-<li>Heatmaps — Geographic flu spread across U.S. regions<br />
+<li><strong>Raw Data</strong> – Download the original dataset for your
+own analysis<br />
 </li>
-<li>Raw Data — Download the original dataset for your own analysis<br />
-</li>
-<li>About the Author — Learn about the creator and project story</li>
+<li><strong>About the Author</strong> – Learn about the creator and
+project story</li>
 </ul>
 <hr />
 </div>
 <div id="data-summary" class="section level2">
 <h2>Data Summary</h2>
 <ul>
-<li>Years Covered: 2000–2023<br />
+<li><strong>Years Covered:</strong> 2000–2023<br />
 </li>
-<li>Tested Samples: 10+ million<br />
+<li><strong>Tested Samples:</strong> 10+ million<br />
 </li>
-<li>Key Metrics: ILI (Influenza-like Illness), % Positive, Strain
-Proportions</li>
+<li><strong>Key Metrics:</strong> ILI (Influenza-like Illness), %
+Positive, Strain Proportions</li>
+</ul>
+<hr />
+</div>
+<div id="limitations-future-work" class="section level2">
+<h2>Limitations &amp; Future Work</h2>
+<p>This analysis depends on CDC-reported surveillance data, which may
+underreport mild or untested flu cases. Future improvements could
+include:</p>
+<ul>
+<li>Incorporating hospitalization and mortality data<br />
+</li>
+<li>Real-time updates using live CDC APIs<br />
+</li>
+<li>Regional predictive models integrating local climate factors</li>
 </ul>
 <hr />
 </div>
@@ -389,7 +424,7 @@ Portal</strong>:<br />
 href="https://www.cdc.gov/flu/weekly/fluviewinteractive.htm">https://www.cdc.gov/flu/weekly/fluviewinteractive.htm</a></p>
 <hr />
 <div style="width: 100%; overflow: hidden; margin-top: 40px;">
-<p><img src="banner.png" alt="Flu Tracker Banner"
+<p><img src="banner.png" alt="Illustrated header showing flu virus structure and trend line graph with the words 'Flu Tracker – Forecasting the Fight'"
        style="width: 100%; max-height: 180px; object-fit: contain; display: block; margin: 0 auto;"></p>
 </div>
 <footer style="font-size: 0.9em; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; color: #555;">

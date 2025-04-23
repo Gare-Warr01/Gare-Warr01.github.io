@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/journal.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -286,6 +286,9 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
+<li><a href="#executive-summary" id="toc-executive-summary">Executive
+Summary</a></li>
+<li><a href="#methods" id="toc-methods">Methods</a></li>
 <li><a href="#total-influenza-cases-over-time"
 id="toc-total-influenza-cases-over-time">1. Total Influenza Cases Over
 Time</a></li>
@@ -298,101 +301,109 @@ Confirmed Cases</a></li>
 <li><a href="#ili-vs.-confirmed-case-correlation"
 id="toc-ili-vs.-confirmed-case-correlation">4. ILI vs. Confirmed Case
 Correlation</a></li>
-<li><a href="#subtype-trends-over-time"
-id="toc-subtype-trends-over-time">5. Subtype Trends Over Time</a></li>
-<li><a href="#average-weekly-activity-curve"
-id="toc-average-weekly-activity-curve">6. Average Weekly Activity
-Curve</a></li>
-<li><a href="#forecast-model-preview-alabama"
-id="toc-forecast-model-preview-alabama">7. Forecast Model Preview
-(Alabama)</a></li>
 <li><a href="#summary-what-the-data-shows"
 id="toc-summary-what-the-data-shows">Summary: What the Data
 Shows</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
 </ul>
 </div>
 
+<div id="executive-summary" class="section level1">
+<h1>Executive Summary</h1>
+<p>This dashboard analyzes influenza trends in the United States from
+2000 to 2023 using CDC FluView surveillance data. Key metrics such as
+total confirmed cases, influenza-like illness (ILI) rates, and subtype
+variations are explored. The project also previews flu case forecasts
+using machine learning (Prophet), providing public health
+decision-makers with insights on seasonality and strain behavior.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+<p>The analysis uses weekly surveillance data from the CDC FluView
+system (2000–2023). ILI metrics represent weighted patient-reported
+flu-like symptoms. Prophet, an open-source forecasting tool developed by
+Facebook, was used to predict future flu activity. Time-series smoothing
+and data cleaning were performed using <code>tidyverse</code>
+packages.</p>
+</div>
 <div id="total-influenza-cases-over-time" class="section level1">
 <h1>1. Total Influenza Cases Over Time</h1>
 <p>This chart displays the yearly total confirmed cases of Influenza A
 and B in the United States.</p>
-<pre><code>## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels
-## Warning in RColorBrewer::brewer.pal(N, &quot;Set2&quot;): minimal value for n is 3, returning requested palette with 3 different levels</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-f825492494f37e77e178" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-f825492494f37e77e178">{"x":{"visdat":{"10c1a283dc3":["function () ","plotlyVisDat"]},"cur_data":"10c1a283dc3","attrs":{"10c1a283dc3":{"x":{},"y":{},"mode":"lines+markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Total Influenza A & B Cases by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Confirmed Cases"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1830,56710,117405,147794,166191,117763,29469,424433,124683,217319,350577],"mode":"lines+markers","type":"scatter","name":"Total_A","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[419,4508,2753,3822,557,5880,5040,4880,12284,11205,3587,11440,10609,18391,11228,20028,24566,45625,72590,48951,78854,1517,3827,30887,88821,29567],"mode":"lines+markers","type":"scatter","name":"Total_B","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ec85144441328798e79f" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ec85144441328798e79f">{"x":{"visdat":{"cec741ad1cd":["function () ","plotlyVisDat"]},"cur_data":"cec741ad1cd","attrs":{"cec741ad1cd":{"x":{},"y":{},"mode":"lines+markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Total Influenza A & B Cases by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Confirmed Cases"},"hovermode":"compare","legend":{"orientation":"h","x":0.10000000000000001,"y":-0.20000000000000001},"showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1830,56710,117405,147794,166191,117763,29469,424433,124683,217319,350577],"mode":"lines+markers","type":"scatter","name":"Total_A","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[419,4508,2753,3822,557,5880,5040,4880,12284,11205,3587,11440,10609,18391,11228,20028,24566,45625,72590,48951,78854,1517,3827,30887,88821,29567],"mode":"lines+markers","type":"scatter","name":"Total_B","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p><strong>What you’re seeing:</strong><br />
 A comparison of Influenza A and B trends over time. Influenza A
 typically dominates most seasons, but spikes in B (such as in 2012 and
 2018) provide insight into unusual activity.</p>
-<hr />
 </div>
 <div id="ili-influenza-like-illness-trends" class="section level1">
 <h1>2. ILI (Influenza-Like Illness) Trends</h1>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-9345847abecbea4fc5a4" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-9345847abecbea4fc5a4">{"x":{"visdat":{"10c1a721ec65b":["function () ","plotlyVisDat"]},"cur_data":"10c1a721ec65b","attrs":{"10c1a721ec65b":{"x":{},"y":{},"name":"Avg ILI","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average ILI by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg ILI (%)"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"name":"Avg ILI","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-0e47a7ded717a675bafc" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-0e47a7ded717a675bafc">{"x":{"visdat":{"cec20f74b40":["function () ","plotlyVisDat"]},"cur_data":"cec20f74b40","attrs":{"cec20f74b40":{"x":{},"y":{},"name":"Avg ILI","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Average ILI by Year","xaxis":{"domain":[0,1],"automargin":true,"title":"Year"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Avg ILI (%)"},"font":{"family":"Arial","size":14},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"name":"Avg ILI","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p><strong>What you’re seeing:</strong><br />
 Weighted ILI reflects flu-like symptoms as reported by patients and
 providers. It often signals the early rise of flu season before
 lab-confirmed case surges.</p>
-<hr />
 </div>
 <div id="top-5-peak-seasons-by-confirmed-cases" class="section level1">
 <h1>3. Top 5 Peak Seasons by Confirmed Cases</h1>
-<pre><code>## # A tibble: 5 × 4
-##    Year Total_A Total_B  Total
-##   &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;  &lt;dbl&gt;
-## 1  2022  424433    3827 428260
-## 2  2025  350577   29567 380144
-## 3  2024  217319   88821 306140
-## 4  2018  147794   72590 220384
-## 5  2019  166191   48951 215142</code></pre>
+<table>
+<caption>Top 5 Influenza Seasons by Total Confirmed Cases</caption>
+<thead>
+<tr class="header">
+<th align="right">Year</th>
+<th align="right">Total_A</th>
+<th align="right">Total_B</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">2022</td>
+<td align="right">424433</td>
+<td align="right">3827</td>
+<td align="right">428260</td>
+</tr>
+<tr class="even">
+<td align="right">2025</td>
+<td align="right">350577</td>
+<td align="right">29567</td>
+<td align="right">380144</td>
+</tr>
+<tr class="odd">
+<td align="right">2024</td>
+<td align="right">217319</td>
+<td align="right">88821</td>
+<td align="right">306140</td>
+</tr>
+<tr class="even">
+<td align="right">2018</td>
+<td align="right">147794</td>
+<td align="right">72590</td>
+<td align="right">220384</td>
+</tr>
+<tr class="odd">
+<td align="right">2019</td>
+<td align="right">166191</td>
+<td align="right">48951</td>
+<td align="right">215142</td>
+</tr>
+</tbody>
+</table>
 <p><strong>What you’re seeing:</strong><br />
 A table ranking the five flu seasons with the highest number of
 confirmed cases. Use this for historical comparison and identifying
 outlier seasons like the 2009 H1N1 pandemic.</p>
-<hr />
 </div>
 <div id="ili-vs.-confirmed-case-correlation" class="section level1">
 <h1>4. ILI vs. Confirmed Case Correlation</h1>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-caac590ba80fabf846fe" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-caac590ba80fabf846fe">{"x":{"visdat":{"10c1a53a373fa":["function () ","plotlyVisDat"]},"cur_data":"10c1a53a373fa","attrs":{"10c1a53a373fa":{"x":{},"y":{},"mode":"markers","marker":{"size":10,"color":{},"colorscale":"Viridis"},"text":{},"hoverinfo":"text","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"ILI vs. Confirmed Influenza Cases","xaxis":{"domain":[0,1],"automargin":true,"title":"Average ILI (%)"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Total Confirmed Cases"},"showlegend":false,"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3120,81276,163030,220384,215142,196617,30986,428260,155570,306140,380144],"mode":"markers","marker":{"color":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"size":10,"colorscale":"Viridis","line":{"color":"rgba(31,119,180,1)"}},"text":["Year: 2000 <br>Avg ILI: 1.76 <br>Total Cases: 0","Year: 2001 <br>Avg ILI: 1.25 <br>Total Cases: 0","Year: 2002 <br>Avg ILI: 1.3 <br>Total Cases: 0","Year: 2003 <br>Avg ILI: 1.91 <br>Total Cases: 0","Year: 2004 <br>Avg ILI: 1.06 <br>Total Cases: 0","Year: 2005 <br>Avg ILI: 1.83 <br>Total Cases: 0","Year: 2006 <br>Avg ILI: 1.55 <br>Total Cases: 0","Year: 2007 <br>Avg ILI: 1.51 <br>Total Cases: 0","Year: 2008 <br>Avg ILI: 1.66 <br>Total Cases: 0","Year: 2009 <br>Avg ILI: 2.85 <br>Total Cases: 0","Year: 2010 <br>Avg ILI: 1.42 <br>Total Cases: 0","Year: 2011 <br>Avg ILI: 1.68 <br>Total Cases: 0","Year: 2012 <br>Avg ILI: 1.68 <br>Total Cases: 0","Year: 2013 <br>Avg ILI: 1.8 <br>Total Cases: 0","Year: 2014 <br>Avg ILI: 1.92 <br>Total Cases: 0","Year: 2015 <br>Avg ILI: 1.72 <br>Total Cases: 3120","Year: 2016 <br>Avg ILI: 1.69 <br>Total Cases: 81276","Year: 2017 <br>Avg ILI: 2.11 <br>Total Cases: 163030","Year: 2018 <br>Avg ILI: 2.36 <br>Total Cases: 220384","Year: 2019 <br>Avg ILI: 2.4 <br>Total Cases: 215142","Year: 2020 <br>Avg ILI: 2.43 <br>Total Cases: 196617","Year: 2021 <br>Avg ILI: 1.69 <br>Total Cases: 30986","Year: 2022 <br>Avg ILI: 2.88 <br>Total Cases: 428260","Year: 2023 <br>Avg ILI: 2.46 <br>Total Cases: 155570","Year: 2024 <br>Avg ILI: 2.74 <br>Total Cases: 306140","Year: 2025 <br>Avg ILI: 5.77 <br>Total Cases: 380144"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"type":"scatter","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-b2176a4f52b42ddb4bf8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b2176a4f52b42ddb4bf8">{"x":{"visdat":{"cec7d2f2467":["function () ","plotlyVisDat"]},"cur_data":"cec7d2f2467","attrs":{"cec7d2f2467":{"x":{},"y":{},"mode":"markers","marker":{"size":10,"color":{},"colorscale":"Viridis"},"text":{},"hoverinfo":"text","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"ILI vs. Confirmed Influenza Cases","xaxis":{"domain":[0,1],"automargin":true,"title":"Average ILI (%)"},"yaxis":{"domain":[0,1],"automargin":true,"title":"Total Confirmed Cases"},"showlegend":false,"font":{"family":"Arial","size":14},"hovermode":"closest"},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1.7578723076923077,1.2487777115384615,1.2966344230769231,1.9050694528301888,1.0618010576923076,1.8301337499999999,1.5527661923076923,1.5116754423076924,1.6613001886792453,2.8544359615384614,1.4181392307692309,1.684833173076923,1.680330826923077,1.8015218653846155,1.9159501132075472,1.7189015769230769,1.6887714807692307,2.114489826923077,2.3576730961538463,2.3978884038461539,2.4279453773584905,1.6943894807692308,2.8839148076923076,2.4597671153846155,2.7416696153846152,5.7737150000000002],"y":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3120,81276,163030,220384,215142,196617,30986,428260,155570,306140,380144],"mode":"markers","marker":{"color":[2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"size":10,"colorscale":"Viridis","line":{"color":"rgba(31,119,180,1)"}},"text":["Year: 2000 <br>Avg ILI: 1.76 <br>Total Cases: 0","Year: 2001 <br>Avg ILI: 1.25 <br>Total Cases: 0","Year: 2002 <br>Avg ILI: 1.3 <br>Total Cases: 0","Year: 2003 <br>Avg ILI: 1.91 <br>Total Cases: 0","Year: 2004 <br>Avg ILI: 1.06 <br>Total Cases: 0","Year: 2005 <br>Avg ILI: 1.83 <br>Total Cases: 0","Year: 2006 <br>Avg ILI: 1.55 <br>Total Cases: 0","Year: 2007 <br>Avg ILI: 1.51 <br>Total Cases: 0","Year: 2008 <br>Avg ILI: 1.66 <br>Total Cases: 0","Year: 2009 <br>Avg ILI: 2.85 <br>Total Cases: 0","Year: 2010 <br>Avg ILI: 1.42 <br>Total Cases: 0","Year: 2011 <br>Avg ILI: 1.68 <br>Total Cases: 0","Year: 2012 <br>Avg ILI: 1.68 <br>Total Cases: 0","Year: 2013 <br>Avg ILI: 1.8 <br>Total Cases: 0","Year: 2014 <br>Avg ILI: 1.92 <br>Total Cases: 0","Year: 2015 <br>Avg ILI: 1.72 <br>Total Cases: 3120","Year: 2016 <br>Avg ILI: 1.69 <br>Total Cases: 81276","Year: 2017 <br>Avg ILI: 2.11 <br>Total Cases: 163030","Year: 2018 <br>Avg ILI: 2.36 <br>Total Cases: 220384","Year: 2019 <br>Avg ILI: 2.4 <br>Total Cases: 215142","Year: 2020 <br>Avg ILI: 2.43 <br>Total Cases: 196617","Year: 2021 <br>Avg ILI: 1.69 <br>Total Cases: 30986","Year: 2022 <br>Avg ILI: 2.88 <br>Total Cases: 428260","Year: 2023 <br>Avg ILI: 2.46 <br>Total Cases: 155570","Year: 2024 <br>Avg ILI: 2.74 <br>Total Cases: 306140","Year: 2025 <br>Avg ILI: 5.77 <br>Total Cases: 380144"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"type":"scatter","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p><strong>What you’re seeing:</strong><br />
 A scatterplot assessing the relationship between average ILI percentages
 and total confirmed flu cases by year. Not every ILI spike translates to
 a high confirmed flu season—but patterns emerge.</p>
-<hr />
-</div>
-<div id="subtype-trends-over-time" class="section level1">
-<h1>5. Subtype Trends Over Time</h1>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.</code></pre>
-<p><img src="outbreak_insights_files/figure-html/flu-subtype-trends-1.png" width="672" /></p>
-<p><strong>What you’re seeing:</strong><br />
-Trends in confirmed cases by flu subtype: H1N1, H3, and both B lineages
-(Victoria and Yamagata). The visualization captures subtype seasonality
-and alternating dominance.</p>
-<hr />
-</div>
-<div id="average-weekly-activity-curve" class="section level1">
-<h1>6. Average Weekly Activity Curve</h1>
-<p><img src="outbreak_insights_files/figure-html/flu-weekly-trend-1.png" width="672" /></p>
-<p><strong>What you’re seeing:</strong><br />
-The average week-by-week case load across all flu seasons from
-2000–2023. Flu activity peaks consistently between January and March,
-confirming classic winter seasonality.</p>
-<hr />
-</div>
-<div id="forecast-model-preview-alabama" class="section level1">
-<h1>7. Forecast Model Preview (Alabama)</h1>
-<p><img src="outbreak_insights_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<p><strong>What you’re seeing:</strong><br />
-Prophet model predictions for Alabama flu cases compared to the actual
-trend. Good alignment indicates potential for forecasting tools in
-public health planning.</p>
-<hr />
 </div>
 <div id="summary-what-the-data-shows" class="section level1">
 <h1>Summary: What the Data Shows</h1>
@@ -409,6 +420,32 @@ winter months<br />
 <li><strong>Forecast use:</strong> Knowing past peaks and subtypes
 improves model targeting</li>
 </ul>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li>Centers for Disease Control and Prevention (CDC). FluView: Weekly
+U.S. Influenza Surveillance Report. <a
+href="https://www.cdc.gov/flu/weekly/"
+class="uri">https://www.cdc.gov/flu/weekly/</a><br />
+</li>
+<li>Taylor, R. J., &amp; Prophet Team. (2017). Forecasting at Scale.
+<em>arXiv preprint arXiv:1701.07897</em>.</li>
+</ul>
+<footer style="font-size: 0.9em; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; color: #555;">
+<p style="margin: 4px 0;">
+Created by Garrett Warr | <strong>UVU Data Science Capstone</strong> |
+Spring 2025<br />
+
+</p>
+<p style="margin: 4px 0;">
+Data Source: CDC FluView | Educational Use Only<br />
+
+</p>
+<p style="margin: 4px 0;">
+Last Updated: April 2025
+</p>
+</footer>
 </div>
 
 

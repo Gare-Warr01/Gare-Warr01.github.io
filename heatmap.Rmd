@@ -1,33 +1,36 @@
-
 ---
 title: "Interactive Flu Heatmap by Year"
 output: 
   html_document:
-    theme: flatly
+    theme: journal
 ---
+
+## Abstract
+
+This interactive dashboard visualizes laboratory-confirmed influenza cases across U.S. states, using public data from the CDC's NREVSS program. The Shiny app enables real-time exploration of case counts by year and flu subtype, providing valuable tools for public health analysis, planning, and outreach.
 
 ## Overview
 
-This interactive dashboard visualizes laboratory-confirmed influenza cases across U.S. states, using public data from the CDC's NREVSS program. It allows users to:
+This dashboard allows users to:
 
-- Select from multiple flu strains (e.g., H1N1, H3, B/Victoria, etc.)
-- Choose a specific year to analyze
-- View:
-  - A dynamic heatmap with case counts per state
-  - A Top 5 leaderboard of the most affected states
-  - A real-time summary of total cases
+- **Select from multiple flu strains** (e.g., H1N1, H3, B/Victoria, etc.)  
+- **Choose a specific year** to analyze  
+- **View:**  
+  - A dynamic **heatmap** with case counts per state  
+  - A **Top 5 leaderboard** of the most affected states  
+  - A **real-time summary** of total cases
 
-The app was developed in R with Shiny and hosted via [shinyapps.io](https://gare-warr01.shinyapps.io/flu_heatmap_app/).
+Developed in R with Shiny and hosted via [shinyapps.io](https://gare-warr01.shinyapps.io/flu_heatmap_app/), this tool is part of a data science capstone project at Utah Valley University.
 
 ---
 
 ## What This Dashboard Shows
 
-- **Interactive Map**: States are color-coded based on the number of flu cases for the selected strain and year.
-- **Strain Selector**: Focus on one strain at a time (e.g., H3N2, B/Yamagata).
-- **Year Selector**: Use the year slider to explore annual trends.
-- **Top 5 States**: Sidebar leaderboard shows the highest-case states for quick comparison.
-- **Popups**: Hover or click on circles to see state-specific counts.
+- **Interactive Map**: States are color-coded based on the number of flu cases for the selected strain and year.  
+- **Strain Selector**: Focus on one strain at a time (e.g., H3N2, B/Yamagata).  
+- **Year Selector**: Use the year slider to explore annual trends.  
+- **Top 5 States**: Sidebar leaderboard shows the highest-case states for quick comparison.  
+- **Popups**: Hover or click on circles to see state-specific counts.  
 
 ---
 
@@ -45,117 +48,38 @@ The app was developed in R with Shiny and hosted via [shinyapps.io](https://gare
 <summary><strong>Click here to view the full R Shiny app code</strong></summary>
 
 ```r
-library(shiny)
-library(leaflet)
-library(dplyr)
-library(readr)
-library(tidyr)
-library(bslib)
-library(shinycssloaders)
-library(ggplot2)
-library(plotly)
-library(DT)
-
-long_flu_data <- read.csv("ICL_NREVSS_LongFormat.csv")
-state_centers <- data.frame(state.center, State = state.name)
-
-strain_labels <- c(
-  "A_H1N1_2009" = "H1N1",
-  "A_H3" = "H3",
-  "A_Subtype_Not_Performed" = "A (Unsubtyped)",
-  "B" = "Influenza B (Total)",
-  "BVic" = "B/Victoria",
-  "BYam" = "B/Yamagata",
-  "H3N2v" = "H3N2v (Variant)",
-  "A_H5" = "H5 (Avian)"
-)
-
-long_flu_data$Strain_Label <- strain_labels[long_flu_data$Strain]
-
-ui <- fluidPage(
-  theme = bs_theme(version = 5, bootswatch = "flatly"),
-  tags$div(style = "padding: 15px;",
-    titlePanel("Flu Case Heatmap by Strain & Year"),
-    sidebarLayout(
-      sidebarPanel(
-        helpText("Visualize flu case totals by strain and state for each year."),
-        selectInput("strain", "Select Flu Strain", choices = unique(long_flu_data$Strain_Label),
-                    selected = unique(long_flu_data$Strain_Label)[1]),
-        sliderInput("year", "Select Year", min = min(long_flu_data$Year), max = max(long_flu_data$Year),
-                    value = max(long_flu_data$Year), step = 1, animate = animationOptions(interval = 1500, loop = TRUE)),
-        textOutput("totalCasesText"),
-        br(),
-        h5("Top 5 States"),
-        DTOutput("topStates")
-      ),
-      mainPanel(
-        withSpinner(leafletOutput("fluMap", height = "600px")),
-        tags$div(style = "text-align: right; font-size: 12px; color: gray; margin-top: 10px;",
-                 "Data source: ICL NREVSS | Map powered by Leaflet & Shiny")
-      )
-    )
-  )
-)
-
-server <- function(input, output, session) {
-  selected_strain <- reactive({
-    names(strain_labels)[which(strain_labels == input$strain)]
-  })
-  
-  filtered_data <- reactive({
-    long_flu_data %>%
-      filter(Year == input$year, Strain == selected_strain())
-  })
-
-  output$fluMap <- renderLeaflet({
-    yearly_flu <- filtered_data() %>%
-      group_by(State) %>%
-      summarise(Total_Cases = sum(Cases, na.rm = TRUE)) %>%
-      left_join(state_centers, by = "State")
-    
-    pal <- colorNumeric("YlOrRd", domain = yearly_flu$Total_Cases)
-
-    leaflet(yearly_flu) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -98.583, lat = 39.833, zoom = 4) %>%
-      addCircleMarkers(
-        lng = ~x, lat = ~y,
-        radius = ~sqrt(Total_Cases) / 2,
-        color = ~pal(Total_Cases),
-        stroke = FALSE, fillOpacity = 0.8,
-        popup = ~paste(
-          "<strong>State:</strong>", State, "<br/>",
-          "<strong>Total Cases:</strong>", format(Total_Cases, big.mark = ",")
-        )
-      ) %>%
-      addLegend("bottomright", pal = pal, values = ~Total_Cases,
-                title = paste("Total Cases in", input$year))
-  })
-
-  output$totalCasesText <- renderText({
-    total <- sum(filtered_data()$Cases, na.rm = TRUE)
-    paste("Total", input$strain, "Cases:", format(total, big.mark = ","))
-  })
-
-  output$topStates <- renderDT({
-    filtered_data() %>%
-      group_by(State) %>%
-      summarise(Cases = sum(Cases, na.rm = TRUE)) %>%
-      arrange(desc(Cases)) %>%
-      slice_head(n = 5) %>%
-      mutate(Rank = row_number()) %>%
-      dplyr::select(Rank, State, Cases)
-  }, options = list(dom = 't', pageLength = 5), rownames = FALSE)
-}
-
-shinyApp(ui, server)
+# R Shiny application code (omitted here for brevity)
 ```
 
 </details>
 
 ---
 
+## Limitations & Future Work
+
+While this tool presents a dynamic and engaging exploration of flu case data, it relies on publicly reported CDC surveillance. As such, it may underrepresent milder or unreported cases. Future enhancements may include:
+
+- Regional overlays for population density or healthcare access  
+- Live data streaming from CDC APIs  
+- Integration with weather and mobility datasets  
+
+---
+
 ## Data Source
 
-- CDC NREVSS: https://www.cdc.gov/surveillance/nrevss/
-- Dataset: `ICL_NREVSS_Summary.csv`, reshaped using `tidyr::pivot_longer()`
+- **CDC NREVSS Surveillance Portal**: [https://www.cdc.gov/surveillance/nrevss/](https://www.cdc.gov/surveillance/nrevss/)  
+- **Dataset**: `ICL_NREVSS_Summary.csv`, reshaped using `tidyr::pivot_longer()`  
+
+---
+
+<footer style="font-size: 0.9em; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; color: #555;">
+  <p style="margin: 4px 0;">
+    Created by Garrett Warr | <strong>UVU Data Science Capstone</strong> | Spring 2025  
+  </p>
+  <p style="margin: 4px 0;">
+    Data Source: CDC NREVSS | Educational Use Only  
+  </p>
+  <p style="margin: 4px 0;">
+    Last Updated: April 2025
+  </p>
+</footer>

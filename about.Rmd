@@ -1,68 +1,70 @@
 ---
 title: "About Me"
-output: html_document
+output: 
+  html_document:
+    theme: journal
+    toc: false
 ---
 
-![Garrett Warr](images/profile.jpg){width="200px" style="border-radius: 50%;"}
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="images/profile.jpg" width="200px" style="border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+  <h3 style="margin-top: 10px; font-weight: normal; color: #555;">Garrett Warr</h3>
+</div>
 
 # About the Creator
 
-> *"Science is not only a disciple of reason, but, also, one of romance and passion."*  
-> — Stephen Hawking
+I am **Garrett Warr**, an undergraduate biotechnology student at **Utah Valley University** with a strong academic and professional interest in **virology**, **pathology**, and **public health data science**. My work focuses on applying computational tools to real-world biological challenges—particularly those involving infectious disease dynamics and surveillance.
 
-My name is **Garrett Warr**, a biotechnology student at **Utah Valley University**, driven by a deep interest in **virology**, **pathology**, and how data can be used to combat public health challenges.
-
-This website was developed as my **final project** for a Data Science course. It brings together influenza surveillance data, time-series modeling, and web-based visualization tools to help make flu trends more understandable, actionable, and accessible.
+This website was created as the **capstone project** for my Data Science course. It integrates influenza surveillance data, time-series forecasting models, and interactive dashboards to support public health awareness and predictive analytics.
 
 ---
 
 ## Scientific Mission
 
-I believe science should not just inform — it should **empower**. I’m passionate about using data to tell meaningful stories, illuminate health risks, and support real-world decision making. My goal is to work in a research lab or epidemiological setting where I can apply data science to emerging diseases and outbreak response.
+I believe that science should not only inform, but also **empower**. My core motivation lies in transforming data into actionable insight—telling stories that uncover hidden patterns, assess public health risks, and enable more effective responses to disease outbreaks. I aim to contribute to the fields of epidemiology and translational research, where data meets decision-making.
 
 ---
 
 ## Academic Background
 
-- **Biotechnology Major** — Utah Valley University  
+- **Bachelor of Science in Biotechnology** — Utah Valley University  
 - **Research Interests:**  
-  - Viral evolution and host-pathogen dynamics  
-  - RNA viruses and mechanisms of infection  
-  - Infectious disease modeling and forecasting  
-  - Bioinformatics and pathogen surveillance  
-- **Career Aspirations:**  
-  Pursue graduate research in virology, epidemiology, or data-driven health science.
+  - Viral evolution and host-pathogen interaction  
+  - Mechanisms of RNA virus infection  
+  - Disease forecasting and modeling  
+  - Bioinformatics for public health surveillance  
+- **Career Goals:**  
+  Pursue graduate-level research in virology, computational epidemiology, or global health informatics, with the long-term objective of advancing outbreak response systems and scientific communication.
 
 ---
 
-## Technical Tools & Skills
+## Technical Skills & Toolset
 
 - **Languages & Libraries:** R, Python, SQL, ggplot2, dplyr, Prophet, Shiny  
-- **Technologies:** R Markdown, GitHub, Shiny dashboards, CDC API datasets  
-- **Skills:**  
-  - Data wrangling and cleaning  
-  - Time series forecasting  
-  - Interactive web development in R  
-  - Visualization and communication of scientific data  
+- **Frameworks & Technologies:** GitHub, R Markdown, CDC FluView API, Shiny for Web App Deployment  
+- **Core Competencies:**  
+  - Data wrangling and preprocessing  
+  - Time-series analysis and forecasting  
+  - Development of interactive dashboards  
+  - Scientific data visualization and reporting  
 
 ---
 
 ## Featured Projects
 
-- **Flu Forecasting Dashboard** *(This Project)*  
-  An interactive web tool visualizing over 20 years of influenza trends in the U.S., with state-level forecasting using Prophet models.  
-  Includes ILI overlays, subtype filters, and predictive visualizations.
+### **Flu Forecasting Dashboard** *(Capstone Project)*  
+A fully interactive data dashboard visualizing more than two decades of influenza activity across the United States. It supports forecasting by flu subtype using Prophet, includes ILI overlays, dynamic heatmaps, and predictive visualization tools for state-level trend tracking.
 
-<!-- Add more: poster presentations, co-authored publications, or independent research in the future -->
+<!-- Future additions: academic posters, co-authored publications, or independent research contributions -->
 
 ---
 
-## Download My CV
+## Curriculum Vitae
 
 <a href="Garrett_Warr_CV_2025.docx" class="btn btn-primary" target="_blank">Download My CV</a>
 
 ---
 
-<footer style="font-size: 0.8em; margin-top: 30px;">
-Created by Garrett Warr | Data Science Final Project | Spring 2025
+<footer style="font-size: 0.8em; margin-top: 30px; border-top: 1px solid #ccc; padding-top: 10px; color: #666;">
+  Created by Garrett Warr | Data Science Capstone Project | Spring 2025
 </footer>

@@ -4,14 +4,20 @@ output:
   html_document:
     toc: true
     toc_depth: 2
-    theme: flatly
+    theme: journal
     number_sections: true
 ---
 
+## Abstract
+
+This interactive dashboard showcases a data-driven forecasting platform developed to analyze and project influenza activity across the United States. Using historical CDC surveillance data and statistical modeling (Prophet), this tool enables real-time visualization of flu trends by subtype and location. With geospatial heatmaps, subtype selectors, and forecast confidence intervals, it supports data-driven public health decision-making.
+
 ## Summary
 
-> **What is this slide?**  
-> This slide showcases a data-driven dashboard developed to forecast influenza activity across the United States. It leverages historical CDC surveillance data and applies a statistical time series forecasting model (Prophet) to project flu subtype trends one to five years into the future. The platform enables users to interact with a geospatial heatmap, select specific influenza subtypes, and visualize state-level forecasts with associated confidence intervals—supporting evidence-based public health planning and surveillance.
+> **What is this dashboard?**  
+> A real-time, interactive tool built to forecast influenza trends by subtype and state across the United States. It blends historical CDC data with modern time series forecasting (Prophet), enabling visual analytics and predictive modeling to enhance public health planning and influenza surveillance.
+
+---
 
 ## Project Overview
 
@@ -19,11 +25,11 @@ This dashboard uses CDC flu surveillance data to forecast influenza trends acros
 
 ### Technologies Used
 
-- **R Shiny** for interactivity
-- **Leaflet** for U.S. heatmap visualizations
-- **Prophet** for time series forecasting
-- **Dygraphs** for forecast charts
-- **ggplot2** for bar chart comparisons
+- **R Shiny** for interactivity  
+- **Leaflet** for U.S. heatmap visualizations  
+- **Prophet** for time series forecasting  
+- **Dygraphs** for forecast charts  
+- **ggplot2** for bar chart comparisons  
 
 ---
 
@@ -42,11 +48,11 @@ You can also explore the embedded version below:
 
 | Feature               | Description                                                         |
 |-----------------------|---------------------------------------------------------------------|
-| Heatmap by State      | Explore flu subtype intensity per U.S. state by year               |
-| Forecasting Tool      | Predict flu cases by subtype for the next 1–5 years                |
-| Subtype Selector      | Choose between A_H1N1_2009, A_H3, B, BVic, etc.                    |
-| State/National View   | Toggle between individual state or national average overlay        |
-| Model Accuracy        | Forecast includes Prophet's confidence intervals (upper/lower CI)  |
+| **Heatmap by State**      | Explore flu subtype intensity per U.S. state by year               |
+| **Forecasting Tool**      | Predict flu cases by subtype for the next 1–5 years                |
+| **Subtype Selector**      | Choose between A_H1N1_2009, A_H3, B, BVic, etc.                    |
+| **State/National View**   | Toggle between individual state or national average overlay        |
+| **Model Accuracy**        | Forecast includes Prophet's confidence intervals (upper/lower CI)  |
 
 ---
 
@@ -65,10 +71,12 @@ The app loads cleaned CDC data and uses Prophet to:
 
 This dashboard uses a machine learning approach to model flu trends:
 
-- Each state's yearly case totals are modeled using the **Prophet** time series framework.
-- Forecasts predict flu subtype cases **1–5 years ahead**.
-- Uncertainty intervals are shown to reflect variability in predictions.
-- Model performance metrics (MAE, RMSE) are included to gauge reliability.
+- Each state's yearly case totals are modeled using the **Prophet** time series framework  
+- Forecasts predict flu subtype cases **1–5 years ahead**  
+- Uncertainty intervals are shown to reflect variability in predictions  
+- Model performance metrics (MAE, RMSE) are included to gauge reliability  
+
+---
 
 ## Dataset Overview
 
@@ -77,10 +85,10 @@ The dataset (`ICL_NREVSS_Summary.csv`) contains:
 - `State` — U.S. state name  
 - `Year` — Surveillance year  
 - `Total_Cases` — Sum of all subtyped influenza cases  
-- Subtypes:
-  - A_H1N1_2009, A_H3
-  - B, BVic, BYam
-  - H3N2v, A_H5
+- Subtypes:  
+  - A_H1N1_2009, A_H3  
+  - B, BVic, BYam  
+  - H3N2v, A_H5  
   - A_Subtype_Not_Performed
 
 ---
@@ -126,20 +134,24 @@ forecast <- predict(m, future)
 | Peak Year     | Year of maximum predicted cases       | 2026            |
 | Trend         | Whether the trend is rising or falling| Increasing      |
 
-## Notes
+---
 
-- Forecast reliability depends on consistent historical reporting
-- The Prophet model includes additive seasonal components and CI bands
-- Data updates will improve future model accuracy
+## Limitations & Future Work
+
+- Forecast reliability depends on consistent historical reporting  
+- Prophet assumes additive seasonality; sudden changes (e.g., pandemics) may reduce accuracy  
+- Future updates may include climate variables, vaccine uptake data, or mobility trends  
 
 ---
 
-## Forecast Method Summary
-
-This dashboard demonstrates real-time forecasting of flu case data by:
-
-- Using `prophet()` to model historical yearly flu counts
-- Predicting values using `predict()` across user-defined future periods
-- Visualizing outcomes via `dygraphs`, with optional confidence intervals and national averages
-
-This is a forecasting tool designed to highlight annual trends, regional outbreaks, and potential flu burden through statistical modeling and visualization.
+<footer style="font-size: 0.9em; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 10px; color: #555;">
+  <p style="margin: 4px 0;">
+    Created by Garrett Warr | <strong>UVU Data Science Capstone</strong> | Spring 2025  
+  </p>
+  <p style="margin: 4px 0;">
+    Data Source: CDC NREVSS | Educational Use Only  
+  </p>
+  <p style="margin: 4px 0;">
+    Last Updated: April 2025
+  </p>
+</footer>
