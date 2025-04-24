@@ -357,7 +357,137 @@ state-specific counts.</li>
 <summary>
 <strong>Click here to view the full R Shiny app code</strong>
 </summary>
-<pre class="r"><code># R Shiny application code (omitted here for brevity)</code></pre>
+<pre class="r"><code># ---- Libraries ----
+library(shiny)
+library(leaflet)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(bslib)
+library(shinycssloaders)
+library(ggplot2)
+library(plotly)
+library(DT)
+
+# ---- Load Dataset ----
+long_flu_data &lt;- read.csv(&quot;ICL_NREVSS_LongFormat.csv&quot;)
+state_centers &lt;- data.frame(state.center, State = state.name)
+
+# ---- Strain Labels ----
+strain_labels &lt;- c(
+  &quot;A_H1N1_2009&quot; = &quot;H1N1&quot;,
+  &quot;A_H3&quot; = &quot;H3&quot;,
+  &quot;A_Subtype_Not_Performed&quot; = &quot;A (Unsubtyped)&quot;,
+  &quot;B&quot; = &quot;Influenza B (Total)&quot;,
+  &quot;BVic&quot; = &quot;B/Victoria&quot;,
+  &quot;BYam&quot; = &quot;B/Yamagata&quot;,
+  &quot;H3N2v&quot; = &quot;H3N2v (Variant)&quot;,
+  &quot;A_H5&quot; = &quot;H5 (Avian)&quot;
+)
+
+# ---- Add Labels ----
+long_flu_data$Strain_Label &lt;- strain_labels[long_flu_data$Strain]
+
+# ---- UI ----
+ui &lt;- fluidPage(
+  theme = bs_theme(version = 5, bootswatch = &quot;flatly&quot;),
+  
+  tags$div(style = &quot;padding: 15px;&quot;,
+           titlePanel(&quot;Flu Case Heatmap by Strain &amp; Year&quot;),
+           
+           sidebarLayout(
+             sidebarPanel(
+               helpText(&quot;Visualize flu case totals by strain and state for each year.&quot;),
+               
+               selectInput(
+                 &quot;strain&quot;, &quot;Select Flu Strain&quot;,
+                 choices = unique(long_flu_data$Strain_Label),
+                 selected = unique(long_flu_data$Strain_Label)[1]
+               ),
+               
+               sliderInput(
+                 &quot;year&quot;, &quot;Select Year&quot;, 
+                 min = min(long_flu_data$Year), 
+                 max = max(long_flu_data$Year), 
+                 value = max(long_flu_data$Year), 
+                 step = 1, 
+                 animate = animationOptions(interval = 1500, loop = TRUE)
+               ),
+               
+               textOutput(&quot;totalCasesText&quot;),
+               br(),
+               h5(&quot;Top 5 States&quot;),
+               DTOutput(&quot;topStates&quot;)
+             ),
+             
+             mainPanel(
+               withSpinner(leafletOutput(&quot;fluMap&quot;, height = &quot;600px&quot;)),
+               tags$div(
+                 style = &quot;text-align: right; font-size: 12px; color: gray; margin-top: 10px;&quot;,
+                 &quot;Data source: ICL NREVSS | Map powered by Leaflet &amp; Shiny&quot;
+               )
+             )
+           )
+  )
+)
+
+# ---- Server ----
+server &lt;- function(input, output, session) {
+  
+  selected_strain &lt;- reactive({
+    names(strain_labels)[which(strain_labels == input$strain)]
+  })
+  
+  filtered_data &lt;- reactive({
+    long_flu_data %&gt;%
+      filter(Year == input$year, Strain == selected_strain())
+  })
+  
+  output$fluMap &lt;- renderLeaflet({
+    yearly_flu &lt;- filtered_data() %&gt;%
+      group_by(State) %&gt;%
+      summarise(Total_Cases = sum(Cases, na.rm = TRUE)) %&gt;%
+      left_join(state_centers, by = &quot;State&quot;)
+    
+    pal &lt;- colorNumeric(&quot;YlOrRd&quot;, domain = yearly_flu$Total_Cases)
+    
+    leaflet(yearly_flu) %&gt;%
+      addProviderTiles(providers$CartoDB.Positron) %&gt;%
+      setView(lng = -98.583, lat = 39.833, zoom = 4) %&gt;%
+      addCircleMarkers(
+        lng = ~x, lat = ~y,
+        radius = ~sqrt(Total_Cases) / 2,
+        color = ~pal(Total_Cases),
+        stroke = FALSE, fillOpacity = 0.8,
+        popup = ~paste(
+          &quot;&lt;strong&gt;State:&lt;/strong&gt;&quot;, State, &quot;&lt;br/&gt;&quot;,
+          &quot;&lt;strong&gt;Total Cases:&lt;/strong&gt;&quot;, format(Total_Cases, big.mark = &quot;,&quot;)
+        )
+      ) %&gt;%
+      addLegend(&quot;bottomright&quot;, pal = pal, values = ~Total_Cases,
+                title = paste(&quot;Total Cases in&quot;, input$year))
+  })
+  
+  output$totalCasesText &lt;- renderText({
+    total &lt;- sum(filtered_data()$Cases, na.rm = TRUE)
+    paste(&quot;Total&quot;, input$strain, &quot;Cases:&quot;, format(total, big.mark = &quot;,&quot;))
+  })
+  
+  output$topStates &lt;- renderDT({
+    filtered_data() %&gt;%
+      group_by(State) %&gt;%
+      summarise(Cases = sum(Cases, na.rm = TRUE)) %&gt;%
+      arrange(desc(Cases)) %&gt;%
+      slice_head(n = 5) %&gt;%
+      mutate(Rank = row_number()) %&gt;%
+      dplyr::select(Rank, State, Cases)
+  }, options = list(dom = &#39;t&#39;, pageLength = 5), rownames = FALSE)
+}
+
+# ---- Run App ----
+shinyApp(ui, server)
+
+</code></pre>
 </details>
 <hr />
 </div>
